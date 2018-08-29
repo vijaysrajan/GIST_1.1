@@ -1,0 +1,9 @@
+source:d:string:t
+estimated_usage_bins:d:string:t
+city:d:string:t
+zone_demand_popularity:d:string:t
+dayType:d:string:t
+BookingHoursPriorToBooking_BUCKETING:d:string:t
+booking_type:d:string:t
+CATEGORY:d:string:f
+cnt:m:double:t

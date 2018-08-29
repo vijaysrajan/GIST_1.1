@@ -1,0 +1,6 @@
+0.1 - Created branch "FirstCut" with Old working sets - Raj - 28th Feb 2016
+0.2 - Master is updated with optimized code with higher benchmarks, use master. - Raj - 29th Feb 2016.
+0.3 - Branch Created with working sets with Candidates for Stage Generation at the end of each stage - Raj - 11th Mar 2016
+0.4 - Ultra Fase Execution of Precis in comparance w.r.to Bordon, Borgelt - 13th April 2016
+0.5 - Adding DB Design/Configurations for storing Precis Configuration using Redis - 28th May 2016
+0.6 - Added Ignore words functionality to ignore "null", "", "0" - kind of words - 11th Sep 2016

@@ -1,0 +1,245 @@
+#
+# Precis Configuration File, Version 0.1
+# 
+#
+
+
+# Precis Input File Name.
+#2003_18_forecast_data.csv
+#2003_19_forecast_data.csv
+#2003_20_forecast_data.csv
+#2003_21_forecast_data.csv
+#2003_22_forecast_data.csv
+
+#schemaFile.pork_item_baskets_greater_than_one_no_philipino_oct.csv
+#schemaFile.pork_and_philipino_oct.csv
+#schemaFile.pork_no_philipino_oct.csv
+#dataFile.pork_item_baskets_greater_than_one_no_philipino_oct.csv
+#dataFile.pork_and_philipino_oct.csv
+#dataFile.pork_no_philipino_oct.csv
+
+
+INPUT_DATA_FILE=./data/dataFile.pork_no_philipino_oct.csv
+INPUT_SCHEMA_FILE=./data/schemaFile.pork_no_philipino_oct.csv
+THRESHOLD=99
+
+
+#INPUT_DATA_FILE=./data/dataFile.JunoTele_activation2
+#INPUT_SCHEMA_FILE=./data/schemaFile.JunoTele_activation
+
+#INPUT_DATA_FILE=./data/dataFile.JunoTele_deactivation2
+#INPUT_SCHEMA_FILE=./data/schemaFile.JunoTele_deactivation
+
+
+#INPUT_DATA_FILE=./data/dataFile.JunoTele_activation2
+#INPUT_DATA_FILE=./data/dataFile.JunoTele_deactivation2
+#INPUT_SCHEMA_FILE=./data/schemaFile.JunoTele_activation_deactivation
+
+#INPUT_DATA_FILE=./data/dataFile.arvindForecast2004_21
+#INPUT_DATA_FILE=./data/2003_18_forecast_data.csv
+#INPUT_DATA_FILE=./data/2003_19_forecast_data.csv
+#INPUT_DATA_FILE=./data/2003_20_forecast_data.csv
+#INPUT_DATA_FILE=./data/2003_21_forecast_data.csv
+#INPUT_DATA_FILE=./data/2003_22_forecast_data.csv
+#INPUT_DATA_FILE=./data/dataFile.gofood_flipburger_29_dec_2017
+#INPUT_DATA_FILE=./data/dataFile.gofood_indonesian_restaurant
+#INPUT_DATA_FILE=./data/dataFile.gofood_flipburger_29_dec_2017_2
+#INPUT_DATA_FILE=./data/dataFile.gofood_indonesian_restaurant_2
+#INPUT_DATA_FILE=./data/dataFile.gofood_542579560
+#INPUT_DATA_FILE=./data/dataFile.3960_Udipi_Shree_Krishna.csv
+
+#INPUT_DATA_FILE=./data/dataFile.PE_churn_analysis_dormant_30th_Oct_2017
+#INPUT_DATA_FILE=./data/dataFile.PE_churn_analysis_active_30th_Oct_2017
+#INPUT_DATA_FILE=./data/dataFile.PE_churn_analysis_30th_Oct_2017
+#INPUT_DATA_FILE=./data/dataFile.arvind_pos_analysis
+#INPUT_DATA_FILE=./data/dataFile.PE_customer_segmentation_bounds
+#INPUT_DATA_FILE=./data/dataFile.PE_cust_seg_bucketed
+#INPUT_DATA_FILE=./data/dataFile_PE_retention_non_returners
+#INPUT_DATA_FILE=./data/dataFile_PE_retention_returners
+#INPUT_DATA_FILE=./data/dataFile.PE_august_customer
+#INPUT_DATA_FILE=./data/dataFile.IPEDS_data
+#INPUT_DATA_FILE=./data/dataFile.addrSnapdeal_rtoMay1st_to_5th_sanitised
+#INPUT_DATA_FILE=./data/dataFile.performanceData
+#INPUT_DATA_FILE=./data/dataFile.uciAdultData
+#INPUT_DATA_FILE=./data/dataFile.FCData
+#INPUT_DATA_FILE=./data/dataFile.cabs7d_cleaned
+#INPUT_DATA_FILE=./data/dataFile.Android7dCleaned
+#INPUT_DATA_FILE=./data/dataFile.recharge7d_cleaned_withoutGender
+#INPUT_DATA_FILE=./data/dataFile.non_rto_fis_output_2016-09-03_aggregated
+#INPUT_DATA_FILE=./data/dataFile.rto_fis_output_2016-09-03_aggregated
+#INPUT_DATA_FILE=./data/dataFile.UCI_Mushroom_edible
+#INPUT_DATA_FILE=./data/dataFile.UCI_Mushroom_poisonous
+#INPUT_DATA_FILE=./data/dataFile.sep_7_2015
+#INPUT_DATA_FILE=./data/dataFile.sep_7_2015_rto
+#INPUT_DATA_FILE=./data/dataFile.sep_7_2015_del
+#INPUT_DATA_FILE=./data/dataFile.marchShopCJ
+#INPUT_DATA_FILE=./data/dataFile.shopCJ_subcategories
+
+
+# Precis Input Data Schema File.
+
+#INPUT_SCHEMA_FILE=./data/schemaFile.arvindForecast
+#INPUT_SCHEMA_FILE=./data/schemaFile.gofood_flipburger_29_dec_2017
+#INPUT_SCHEMA_FILE=./data/schemaFile.gofood_2
+#INPUT_SCHEMA_FILE=./data/schemaFile.gofood_precis_sale
+#INPUT_SCHEMA_FILE=./data/schemaFile.3960_Udipi_Shree_Krishna.csv
+
+#INPUT_SCHEMA_FILE=./data/schemaFile.PE_churn_analysis_dormancy_30th_Oct_2017
+#INPUT_SCHEMA_FILE=./data/schemaFile.PE_churn_analysis_30th_Oct_2017
+#INPUT_SCHEMA_FILE=./data/schemaFile.arvind_pos_analysis
+#INPUT_SCHEMA_FILE=./data/schemaFile.PE_customer_segmentation_bounds
+#INPUT_SCHEMA_FILE=./data/schemaFile.PE_cust_seg_bucketed
+#INPUT_SCHEMA_FILE=./data/schemaFile.PE_retention
+#INPUT_SCHEMA_FILE=./data/schemaFile.PE_august_customer
+#INPUT_SCHEMA_FILE=./data/schemaFile.IPEDS_data
+#INPUT_SCHEMA_FILE=./data/schemaFile.addrSnapdeal_may1st_to_5th
+#INPUT_SCHEMA_FILE=./data/schemaFile.performanceData
+#INPUT_SCHEMA_FILE=./data/schemaFile.uciAdultData
+#INPUT_SCHEMA_FILE=./data/schemaFile.FCData
+#INPUT_SCHEMA_FILE=./data/schemaFile.Android7dCleaned
+#INPUT_SCHEMA_FILE=./data/schemaFile.non_rto_fis_output_2016-09-03_aggregated
+#INPUT_SCHEMA_FILE=./data/schemaFile.rto_fis_output_2016-09-03_aggregated
+#INPUT_SCHEMA_FILE=./data/schemaFile.UCI_Mushroom
+#INPUT_SCHEMA_FILE=./data/schemaFile.sep2015
+#INPUT_SCHEMA_FILE=./data/schemaFile.sep2015_without_suborder_status
+#INPUT_SCHEMA_FILE=./data/schemaFile.pharmeasyCustomerSegmentation
+#INPUT_SCHEMA_FILE=./data/schemaFile.shopCJ_test
+#INPUT_SCHEMA_FILE=./data/schemaFile.shopCJ_subcategories
+
+
+
+# Precis Output Files (i.e) Candidates, Raw Candidates (Candidates as bit stream) files etc.
+# By default, the Candidate files will only be generated, Raw Candidates will not be generated.
+# Generating Output Files are time consuming, it will limit the speed of the Precis Application.
+# Raw Candidates are only used to Debug the Precis application. So they are not generated default.
+#
+OUPUT_DIR=./data/
+
+# Canididates File Pattern,the ${stage_number} will be replaced by actual stage number.
+OUPUT_CANDIDATE_FILE_PATTERN=stage_${stage_number}_candidate_file.txt
+
+GENERATE_RAW_CANDIDATE_FILE=false
+
+# Raw Candidates File Pattern, the ${stage_number} will be replaced by actual stage number.
+OUPUT_RAW_CANDIDATE_FILE_PATTERN=stage_${stage_number}_raw_candidate_file.txt
+
+# Input File Record Seperator as ASCII, Default is ^A ( Control - A ).
+INPUT_RECORD_SEPERATOR=\u0001
+
+# Output Record Seperator, again in ASCII.
+OUTPUT_RECORD_SEPERATOR_DIMENSION=\u0001
+OUTPUT_RECORD_SEPERATOR_METRIC=\u0003
+OUTPUT_RECORD_SEPERATOR_STAGENUMBER=\u0004
+
+# Output Dimension, Value Seperator, Precis will be generated as Combination of various Dimension, Value records.
+# Here we are using ^B ( Control - B )
+OUTPUT_DIMVAL_SEPERATOR=\u0002
+
+# Want to Run Count Precis on the data set, Default is Metric Precis.
+# In Count Precis, Metric Field is also treated as a Dimension.
+# Precis is calculated on the Count.
+IS_COUNT_PRECIS=false
+#In case of count precis, there is no metric field, even the metric will be treated as dim.
+COUNT_PRECIS_METRIC_NAME=count
+# Threshold - Precis Threshold, Read as Data Type Double.
+#default threshold in case we are not using the threshold gen.
+#THRESHOLD=99
+#use Threshold Generator to make the stuff below apply instead of THRESHOLD=??? change  USE_THRESHOLD_GEN=true
+USE_THRESHOLD_GEN=false
+#Configure precis until level 3 as threshold 1
+THRESHOLD_UPTO_LEVEL_3=1
+#Upto Level 3 if we want percentage threshold, not the absolutes.
+USE_THRESHOLD_PERCENTAGE_UPTO_LEVEL_3=false
+#Use thereshold as percentage
+USE_THRESHOLD_PERCENTAGE_AFTER_LEVEL_3=false
+#Handle different thresholds at different levels post level 3.
+#Fixed - 3% support threshold post level 3
+#Linear - 1% at level 4, 2% at level 5, 3% at level 6, 4% at level 7 and fixed at 5% thereon.
+#Exponential - 1% at level 4, 2% at level 5, 4% at level 6, 8% at level 7 and fixed at 8% thereon.
+#Given an example for liner threshold, order should be linear.
+THRESHOLD_GEN_FORMULA_AFTER_LEVEL_3=4:4:3:5
+# No of Precis Stages to Run.
+NO_OF_STAGES=4
+
+#Dump Dim Val Feeds
+DUMP_DIM_FEED=false
+
+#Dump Bit Set Input Feed
+DUMP_BITSET_FEED=false
+
+#Ignore the following words in records of the data.
+IGN_WORDS=null,,0
+
+#Hierarchy Fields enable, fields like gt50,gt60,gt70 which has value true or false
+HIERARCHY_DIMS_ENABLED=false
+
+#List of Comma Seperated Hierarchy Dim Groups, Groups are Seperated by ":"
+#example "lt20,lt30,lt40:gt10,gt20,gt30" tells there are 2 hierarchy groups(lt & gt), candidate removal logic will be applied only
+#within a group
+HIERARCHY_DIM_GROUPS=customer_with_exactly_one_order,customer_with_exactly_two_orders,customer_with_between_3_to_5_orders,customer_with_between_5_to_10_orders,customer_with_more_than_10_orders
+#customer_with_exactly_one_order,customer_with_exactly_two_orders
+#aov_GreaterThanOrEqualTo_0.0,aov_GreaterThanOrEqualTo_500.0,aov_GreaterThanOrEqualTo_600.0,aov_GreaterThanOrEqualTo_700.0,aov_GreaterThanOrEqualTo_800.0,aov_GreaterThanOrEqualTo_900.0,aov_GreaterThanOrEqualTo_1000.0,aov_GreaterThanOrEqualTo_1100.0,aov_GreaterThanOrEqualTo_1200.0,aov_GreaterThanOrEqualTo_1300.0,aov_GreaterThanOrEqualTo_1400.0,aov_GreaterThanOrEqualTo_1500.0,aov_GreaterThanOrEqualTo_2000.0,aov_GreaterThanOrEqualTo_2500.0:frequency_GreaterThanOrEqualTo_0.0,frequency_GreaterThanOrEqualTo_7.0,frequency_GreaterThanOrEqualTo_15.0,frequency_GreaterThanOrEqualTo_22.0,frequency_GreaterThanOrEqualTo_30.0,frequency_GreaterThanOrEqualTo_45.0,frequency_GreaterThanOrEqualTo_60.0,frequency_GreaterThanOrEqualTo_90.0:recency_LessThanOrEqualTo_9.999999999E9,recency_LessThanOrEqualTo_180.0,recency_LessThanOrEqualTo_90.0,recency_LessThanOrEqualTo_60.0,recency_LessThanOrEqualTo_45.0,recency_LessThanOrEqualTo_30.0,recency_LessThanOrEqualTo_15.0,recency_LessThanOrEqualTo_0.0:partially_or_fully_delivered_orders_GreaterThanOrEqualTo_0.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_1.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_2.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_3.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_4.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_5.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_6.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_7.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_8.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_9.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_10.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_15.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_25.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_30.0,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_50.0:referred_customer_count_GreaterThanOrEqualTo_0.0,referred_customer_count_GreaterThanOrEqualTo_1.0,referred_customer_count_GreaterThanOrEqualTo_2.0,referred_customer_count_GreaterThanOrEqualTo_3.0,referred_customer_count_GreaterThanOrEqualTo_4.0,referred_customer_count_GreaterThanOrEqualTo_5.0,referred_customer_count_GreaterThanOrEqualTo_10.0,referred_customer_count_GreaterThanOrEqualTo_20.0:lifetime_mrp_revenue_GreaterThanOrEqualTo_0.0,lifetime_mrp_revenue_GreaterThanOrEqualTo_1000.0,lifetime_mrp_revenue_GreaterThanOrEqualTo_2000.0,lifetime_mrp_revenue_GreaterThanOrEqualTo_5000.0,lifetime_mrp_revenue_GreaterThanOrEqualTo_10000.0,lifetime_mrp_revenue_GreaterThanOrEqualTo_40000.0,lifetime_mrp_revenue_GreaterThanOrEqualTo_50000.0,lifetime_mrp_revenue_GreaterThanOrEqualTo_70000.0,lifetime_mrp_revenue_GreaterThanOrEqualTo_100000.0:lifetime_discount_availed_as_percentage_of_mrp_GreaterThanOrEqualTo_0.0,lifetime_discount_availed_as_percentage_of_mrp_GreaterThanOrEqualTo_5.0,lifetime_discount_availed_as_percentage_of_mrp_GreaterThanOrEqualTo_10.0,lifetime_discount_availed_as_percentage_of_mrp_GreaterThanOrEqualTo_15.0,lifetime_discount_availed_as_percentage_of_mrp_GreaterThanOrEqualTo_20.0,lifetime_discount_availed_as_percentage_of_mrp_GreaterThanOrEqualTo_25.0,lifetime_discount_availed_as_percentage_of_mrp_GreaterThanOrEqualTo_30.0:VMR_GreaterThanOrEqualTo_0.0,VMR_GreaterThanOrEqualTo_0.25,VMR_GreaterThanOrEqualTo_0.5,VMR_GreaterThanOrEqualTo_0.75,VMR_GreaterThanOrEqualTo_1.0,VMR_GreaterThanOrEqualTo_1.5,VMR_GreaterThanOrEqualTo_2.0,VMR_GreaterThanOrEqualTo_3.0,VMR_GreaterThanOrEqualTo_10.0,VMR_GreaterThanOrEqualTo_25.0,VMR_GreaterThanOrEqualTo_40.0,VMR_GreaterThanOrEqualTo_70.0:no_of_medicines_digitized_GreaterThanOrEqualTo_0.0,no_of_medicines_digitized_GreaterThanOrEqualTo_1.0,no_of_medicines_digitized_GreaterThanOrEqualTo_2.0,no_of_medicines_digitized_GreaterThanOrEqualTo_3.0,no_of_medicines_digitized_GreaterThanOrEqualTo_4.0,no_of_medicines_digitized_GreaterThanOrEqualTo_5.0,no_of_medicines_digitized_GreaterThanOrEqualTo_6.0,no_of_medicines_digitized_GreaterThanOrEqualTo_7.0,no_of_medicines_digitized_GreaterThanOrEqualTo_8.0,no_of_medicines_digitized_GreaterThanOrEqualTo_9.0,no_of_medicines_digitized_GreaterThanOrEqualTo_10.0:no_of_chronic_medicines_GreaterThanOrEqualTo_0.0,no_of_chronic_medicines_GreaterThanOrEqualTo_1.0,no_of_chronic_medicines_GreaterThanOrEqualTo_2.0,no_of_chronic_medicines_GreaterThanOrEqualTo_3.0,no_of_chronic_medicines_GreaterThanOrEqualTo_4.0,no_of_chronic_medicines_GreaterThanOrEqualTo_5.0,no_of_chronic_medicines_GreaterThanOrEqualTo_6.0,no_of_chronic_medicines_GreaterThanOrEqualTo_7.0,no_of_chronic_medicines_GreaterThanOrEqualTo_8.0,no_of_chronic_medicines_GreaterThanOrEqualTo_9.0,no_of_chronic_medicines_GreaterThanOrEqualTo_10.0:customer_diseases_GreaterThanOrEqualTo_0.0,customer_diseases_GreaterThanOrEqualTo_1.0,customer_diseases_GreaterThanOrEqualTo_2.0,customer_diseases_GreaterThanOrEqualTo_3.0,customer_diseases_GreaterThanOrEqualTo_4.0,customer_diseases_GreaterThanOrEqualTo_5.0,customer_diseases_GreaterThanOrEqualTo_6.0,customer_diseases_GreaterThanOrEqualTo_7.0,customer_diseases_GreaterThanOrEqualTo_8.0,customer_diseases_GreaterThanOrEqualTo_12.0,customer_diseases_GreaterThanOrEqualTo_16.0:issue_resolution_tat_in_hours_GreaterThanOrEqualTo_0.0,issue_resolution_tat_in_hours_GreaterThanOrEqualTo_6.0,issue_resolution_tat_in_hours_GreaterThanOrEqualTo_12.0,issue_resolution_tat_in_hours_GreaterThanOrEqualTo_18.0,issue_resolution_tat_in_hours_GreaterThanOrEqualTo_24.0,issue_resolution_tat_in_hours_GreaterThanOrEqualTo_36.0,issue_resolution_tat_in_hours_GreaterThanOrEqualTo_48.0:aov_GreaterThanOrEqualTo_0.0,frequency_GreaterThanOrEqualTo_0.0,recency_LessThanOrEqualTo_9.999999999E9,partially_or_fully_delivered_orders_GreaterThanOrEqualTo_0.0,referred_customer_count_GreaterThanOrEqualTo_0.0,lifetime_mrp_revenue_GreaterThanOrEqualTo_0.0,VMR_GreaterThanOrEqualTo_0.0,no_of_medicines_digitized_GreaterThanOrEqualTo_0.0,no_of_chronic_medicines_GreaterThanOrEqualTo_0.0,customer_diseases_GreaterThanOrEqualTo_0.0,issue_resolution_tat_in_hours_GreaterThanOrEqualTo_0.0
+
+#Logging Data (for fast execution)
+LOGGING_ENABLED=true
+#4 levels of logging DEBUG,INFO,WARN,ERROR
+LOGGING_LEVEL=INFO
+
+######################################################################################################################################
+
+#New things to add for Thiyag 12th Nov 2016
+
+#1.a
+#Avoid joins at each level between some columns that form a natural Hierarchy
+ #A Pincode/Zipcode implies a city or town or village which implies a county or district which implies a state or province which implies a country which implies a continent
+ #Such cross joins should be stopped at candidate generation stage at level 2 itself so that
+ #City=Bengaluru and State=Karnataka 
+ #These values must be dimensions
+HIERARCHY_FIELDS=<COL_A>:<COL_B>;<COL_B>:<COL_C>
+#implicitly the user may not want to join COL_A with COL_C. This needs to be raised in the UI if the user wants to do it or not and added to the HIERARCHY_FIELDS list
+
+#1.b
+#Since the HIERARCHY is predefined, we should automatically be able to drill down or show pie charts from the HIERARCHY_FIELDS example
+#If We have an FIS  Gender=Female and Age=20-27 and State=Karnataka, the user may want to see only the Gender=Female and Age=20-27 for cities in Karnataka
+#This will require a file called HIERARCHY_VALUES_FILE which will have STATE=KARNATAKA-CITIES=BENGALURU;MYSURU,MANGALURU,SHIMOGA,BIJAPUR,HASSAN ...
+HIERARCHY_VALUES_FILE=State_Cities.txt;City_Pincodes.txt;State_pincodes.txt
+
+#1.c
+#Date
+#We should be able to identify Fields from the UI and automatically put YYYYMMDD formats
+#Just like HIERARCHY_FIELDS explained above, we should be able to create new columns for date(YYYYMMDD) like month(YYYYMM), week(YYYYWW) and year(YYYY) and avoid the joins based on them
+HIERARCHY_FIELDS=DATE:WEEK;DATE:MONTH;DATE:YEAR;MONTH:YEAR
+
+#2
+#Compute all true values until level 1 or level 2 or level 3 ignoring support threshold and from next level onwards apply support Threshold
+IGN_SUPPORT_THRESHOLD_UNTIL_INCLUSIVE_OF_LEVEL=2 
+#This must respect HIERARCHY_FIELDS to avoid wasteful FIS from being generated
+
+#3.a
+#Discritization of Metrics
+ #There are two types of Binning that we support FIXED_WIDTH and FREQUENCY_BINNING
+ #NOTE: This can only work in case the input data is raw events and not aggregates so we will need another flag DATA_KIND
+DATA_KIND=<RAW_EVENTS> 
+#The other option is DATA_KIND=<AGGREGATE> which would make the flag below wrong so we must throw error that AGGREGATE does not make sense with METRIC_DISCRETIZATION     
+METRIC_DISCRETIZATION=<METRIC_NAME>:<FREQUENCY_BINNING or FIXED_WIDTH>:<NUMBER_OF_BINS or WIDTH_SIZE>;<METRIC_NAME>:<FREQUENCY_BINNING or FIXED_WIDTH>:<NUMBER_OF_BINS or WIDTH_SIZE>
+
+#3.b
+#Similarly there may be another field called CUMMULATIVE_METRIC_DISCRETIZATION, here we pivot a metric like say REVENUE into multiple columns which should not be joined with each other 
+#as they are also a part of HIERARCHY_FIELDS as explained earlier
+ #example
+ #REVENUE_LESS_THAN_1000,REVENUE_LESS_THAN_2000, REVENUE_LESS_THAN_3000, etc  
+
+
+#4
+#Delayed Joins for Id replacement
+ #Ids may have been used in Fact Table 
+ #For Example
+   #Country=India may have been represented as 
+   #CountryId=1
+   #To Mitigate this so that data processing using precis of Gist is fast and the data Smaller in size, we can do delayed replacement for the actual consumable itemsets
+   #So an FIS CountryId=1 and GenderId=1 will get replaced at delayed query time with equivalence where CountryId=1 is Country=India and GenderId=1 is Gender=Female
+REPLACE_ID_COLUMN_FROM_FILE=<COLUMN_NAME>:<LOOKUP_FILE_NAME>;<COLUMN_NAME2>:<LOOKUP_FILE_NAME2>;   
+
+
+
+

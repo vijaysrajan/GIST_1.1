@@ -1,0 +1,7 @@
+source:d:string:t
+sla:d:string:t
+city:d:string:t
+zone:d:string:t
+pickUpDayType:d:string:t
+pickUpHourOfDay:d:string:t
+booking_type:d:string:t

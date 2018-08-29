@@ -1,0 +1,12 @@
+restaurant_popularity:d:string:t
+metropolitan_area:d:string:t
+zone_popularity:d:string:t
+day_of_week:d:string:t
+day_type:d:string:t
+time_period_of_day:d:string:t
+month:d:string:t
+distinct_item_count:d:string:t
+ordered_to_delivered_bucket:d:string:t
+discount_flag:d:string:t
+post_status:d:string:f
+order_count:m:double:t

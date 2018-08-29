@@ -1,0 +1,12 @@
+source:d:string:t
+estimated_usage_bins:d:string:t
+city:d:string:t
+zone:d:string:t
+zone_demand_popularity:d:string:t
+dayType:d:string:t
+sla:d:string:t
+booking_type:d:string:t
+CATEGORY:d:string:t
+DU_Bad_Count:m:double:t
+DU_No_Bad_Count:m:double:f
+cnt:m:double:f
