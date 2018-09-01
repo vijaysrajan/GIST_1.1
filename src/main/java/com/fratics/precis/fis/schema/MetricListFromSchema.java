@@ -51,4 +51,9 @@ public class MetricListFromSchema {
 		return ret;
 	}
 	
+	public static boolean isCountPrecisEnabled() {
+		return  metricList.get(0).isCountPrecis();
+	}
+	
+	
 }

@@ -38,7 +38,10 @@ public class PrecisSchemaProcessor extends PrecisProcessor {
         //while ((str = ps.readStream()) != null) {
         for (String s : strArr) {
         		String[] str = s.split(":", -1);
-            if (str[3].equalsIgnoreCase("t")) {
+        		if (str.length ==2) { //indicating countPrecis
+                double threshold = Double.parseDouble(str[1]);
+        			MetricListFromSchema.addMetricDetails(new MetricDetails (str[0],threshold,true));
+        		} else  if (str[3].equalsIgnoreCase("t")) {
                 Schema.FieldType fieldType;
                 if (str[1].equalsIgnoreCase("d")) {
                     fieldType = Schema.FieldType.DIMENSION;

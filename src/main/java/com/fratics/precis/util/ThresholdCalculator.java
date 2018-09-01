@@ -90,6 +90,10 @@ public class ThresholdCalculator extends PrecisBase {
         logger.info("Total Metric Value for Calculation of Threshold ::" + totalValue);
         this.totalValue = totalValue;
     }
+    
+//    public boolean isCountPrecisEnabled() {
+//    		MetricListFromSchema.isCountPrecisEnabled();
+//    }
 
     public double getThresholdValue(int currentStage) {
         double value = getThreshold(currentStage);
