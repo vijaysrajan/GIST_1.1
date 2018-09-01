@@ -4,3 +4,5 @@
 0.4 - Ultra Fase Execution of Precis in comparance w.r.to Bordon, Borgelt - 13th April 2016
 0.5 - Adding DB Design/Configurations for storing Precis Configuration using Redis - 28th May 2016
 0.6 - Added Ignore words functionality to ignore "null", "", "0" - kind of words - 11th Sep 2016
+0.7 - Allowed limits on count. Optimized with usage of StringBuilder where unnecessary string temp objects were being created. Added limit for number of FIS generated. - 29th Aug 2018
+
