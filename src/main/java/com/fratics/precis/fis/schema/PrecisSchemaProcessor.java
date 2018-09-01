@@ -7,26 +7,37 @@ import com.fratics.precis.fis.base.Schema;
 import com.fratics.precis.fis.base.ValueObject;
 
 public class PrecisSchemaProcessor extends PrecisProcessor {
-    private PrecisStream ps = null;
+    //private PrecisStream ps = null;
+	String schema_string = "";
+	
+	boolean isCountPrecisOnly = false;
+	boolean isSingleMetricPrecisOnly = false;
+	boolean isMultiMetricPrecis = false;
 
-    public PrecisSchemaProcessor(PrecisStream ps) {
-        this.ps = ps;
+	public PrecisSchemaProcessor(String schema) {
+        this.schema_string = schema;
     }
 
+    //dummy function
     public boolean initialize() throws Exception {
-        return this.ps.initialize();
+        //return this.ps.initialize();
+    		return true;
     }
 
+    //dummy function
     public boolean unInitialize() throws Exception {
-        return this.ps.unInitialize();
+        return true; //this.ps.unInitialize();
     }
 
     public boolean process(ValueObject o) throws Exception {
-        String[] str = null;
+        String[] strArr = this.schema_string.split(";",-1);
         Schema schema = new Schema();
         int i = 0;
         int metricCount = 0;
-        while ((str = ps.readStream()) != null) {
+        
+        //while ((str = ps.readStream()) != null) {
+        for (String s : strArr) {
+        		String[] str = s.split(":", -1);
             if (str[3].equalsIgnoreCase("t")) {
                 Schema.FieldType fieldType;
                 if (str[1].equalsIgnoreCase("d")) {
@@ -35,8 +46,13 @@ public class PrecisSchemaProcessor extends PrecisProcessor {
                     fieldType = Schema.FieldType.METRIC;
                     o.inputObject.setMetricIndex(i);
                     o.inputObject.setMetricName(str[0]);
-                    if (metricCount > 0)
-                        throw new PrecisException("More than 1 Metric Count in Schema");
+                    //if (metricCount > 0)
+                    //    throw new PrecisException("More than 1 Metric Count in Schema");
+                    double threshold = -2;
+                    if(str.length == 5) {
+                    		threshold = Double.parseDouble(str[4]);
+                    }
+                    MetricListFromSchema.addMetricDetails(new MetricDetails (str[0],i,true,threshold));
                     metricCount++;
                 }
                 schema.addSchemaElement(str[0], i, fieldType);

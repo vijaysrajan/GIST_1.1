@@ -64,6 +64,8 @@ public abstract class InputObject implements Serializable {
     //count of FIS insights
     private long countOfInsights = 0;
     
+    
+    
 
     public double getThreshold() {
         return threshold;
@@ -100,6 +102,12 @@ public abstract class InputObject implements Serializable {
     public void setMetricIndex(int metricIndex) {
         this.metricIndex = metricIndex;
     }
+    
+    
+    
+    
+    
+    
 
     public int getNoOfFields() {
         return noOfFields;

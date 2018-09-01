@@ -1,5 +1,6 @@
 package com.fratics.precis.fis.util;
 
+import com.fratics.precis.exception.PrecisException;
 import com.fratics.precis.util.ConfigObject;
 
 import java.util.Arrays;
@@ -13,7 +14,8 @@ public class PrecisConfigProperties {
     public static String OUTPUT_RECORD_SEPERATOR_DIMENSION = Character.toString('\001');
     public static String OUTPUT_RECORD_SEPERATOR_METRIC = Character.toString('\003');
     public static String OUTPUT_RECORD_SEPERATOR_STAGENUMBER = Character.toString('\004');
-    public static String INPUT_SCHEMA_FILE = "./data/schemaFile";
+    //public static String INPUT_SCHEMA_FILE = "./data/schemaFile";
+    public static String SCHEMA = "";
     public static int NO_OF_STAGES = 8;
     public static long   GIST_MAX_NUMBER_OF_INSIGHTS=1000000;
     public static boolean GIST_GENERATE_SINGLE_OUTPUT_FILE = false;
@@ -22,10 +24,10 @@ public class PrecisConfigProperties {
     public static boolean IS_COUNT_PRECIS = false;
     public static boolean GENERATE_RAW_CANDIDATE_FILE = false;
     public static String COUNT_PRECIS_METRIC_NAME = "count";
-    public static double THRESHOLD = 36000;
+    //public static double THRESHOLD = 36000;
     public static String OUTPUT_DIMVAL_SEPERATOR = Character.toString('\002');
     public static String OUPUT_RAW_CANDIDATE_FILE_PATTERN = "stage_${stage_number}_raw_candidate_file.txt";
-    public static String SCHEMA_RECORD_SEPERATOR = ":";
+    public static String SCHEMA_RECORD_SEPERATOR = ";";
     public static String BITSET_FEED_FILENAME = "./data/bitSetFeed.txt";
     public static String DIM_FEED = "./data/dimFeed.txt";
     public static String DIMVAL_FEED = "./data/dimValFeed.txt";
@@ -65,7 +67,7 @@ public class PrecisConfigProperties {
         loadConfig(c);
     }
 
-    public static void loadConfig(ConfigObject c) {
+    public static void loadConfig(ConfigObject c) throws Exception{
 
         String tmp = c.getProperties().getProperty("OUPUT_DIR");
         if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
@@ -109,11 +111,13 @@ public class PrecisConfigProperties {
                 OUTPUT_RECORD_SEPERATOR_STAGENUMBER = s;
         }
 
-        tmp = c.getProperties().getProperty("INPUT_SCHEMA_FILE");
-        if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
-            INPUT_SCHEMA_FILE = tmp;
+        tmp = c.getProperties().getProperty("SCHEMA");
+        if ((tmp == null || tmp.equalsIgnoreCase(""))) {
+    	  		throw new PrecisException("No Schema found.");
+        } else {
+        		SCHEMA = tmp;
         }
-
+        
         tmp = c.getProperties().getProperty("NO_OF_STAGES");
         if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
             try {
@@ -176,13 +180,13 @@ public class PrecisConfigProperties {
             DUMP_BITSET_FEED = Boolean.parseBoolean(tmp);
         }
 
-        tmp = c.getProperties().getProperty("THRESHOLD");
-        if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
-            try {
-                THRESHOLD = Double.parseDouble(tmp);
-            } catch (Exception e) {
-            }
-        }
+//        tmp = c.getProperties().getProperty("THRESHOLD");
+//        if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
+//            try {
+//                THRESHOLD = Double.parseDouble(tmp);
+//            } catch (Exception e) {
+//            }
+//        }
 
         tmp = c.getProperties().getProperty("OUTPUT_DIMVAL_SEPERATOR");
         if (!(tmp == null || tmp.equalsIgnoreCase(""))) {

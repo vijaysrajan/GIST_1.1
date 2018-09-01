@@ -1,6 +1,12 @@
 package com.fratics.precis.util;
 
 import com.fratics.precis.fis.base.PrecisBase;
+import com.fratics.precis.fis.base.PrecisProcessor;
+import com.fratics.precis.fis.base.ValueObject;
+import com.fratics.precis.fis.main.metrics.MetricsPrecisInputObject;
+import com.fratics.precis.fis.main.metrics.MetricsPrecisOutputObject;
+import com.fratics.precis.fis.schema.MetricListFromSchema;
+import com.fratics.precis.fis.schema.PrecisSchemaProcessor;
 import com.fratics.precis.fis.util.PrecisConfigProperties;
 
 public class ThresholdCalculator extends PrecisBase {
@@ -14,11 +20,18 @@ public class ThresholdCalculator extends PrecisBase {
 
     public static void main(String[] args) throws Exception {
         PrecisConfigProperties.init();
+        PrecisProcessor ps = new PrecisSchemaProcessor(PrecisConfigProperties.SCHEMA);
+        ValueObject vo = new ValueObject();
+        vo.inputObject = new MetricsPrecisInputObject();
+        vo.resultObject = new MetricsPrecisOutputObject();
+        ps.process(vo);
+        ps.initialize();
         ThresholdCalculator thresholdCalculator = ThresholdCalculator.getInstance();
         thresholdCalculator.initialize();
         Logger logger = Logger.getInstance();
         logger.initialize();
         thresholdCalculator.setTotalValue(100000);
+
         logger.info("" + thresholdCalculator.getThresholdValue(1));
         logger.info("" + thresholdCalculator.getThresholdValue(2));
         logger.info("" + thresholdCalculator.getThresholdValue(3));
@@ -28,6 +41,7 @@ public class ThresholdCalculator extends PrecisBase {
         logger.info("" + thresholdCalculator.getThresholdValue(7));
         logger.info("" + thresholdCalculator.getThresholdValue(8));
         logger.info("" + thresholdCalculator.getThresholdValue(9));
+        ps.unInitialize();
     }
 
     public static ThresholdCalculator getInstance() {
@@ -84,25 +98,26 @@ public class ThresholdCalculator extends PrecisBase {
     }
 
     private double getThreshold(int currentStage) {
-        if (!PrecisConfigProperties.USE_THRESHOLD_GEN) return PrecisConfigProperties.THRESHOLD;
-        if (currentStage <= 3) {
-            if (PrecisConfigProperties.USE_THRESHOLD_PERCENTAGE_UPTO_LEVEL_3) {
-                //generate percentage.
-                logger.info("Threshold Percentage Applied ::" + PrecisConfigProperties.THRESHOLD_UPTO_LEVEL_3 + "%");
-                return (PrecisConfigProperties.THRESHOLD_UPTO_LEVEL_3 * totalValue / 100);
-            } else {
-                logger.info("Threshold Absoulte Value Applied ::" + PrecisConfigProperties.THRESHOLD_UPTO_LEVEL_3);
-                return PrecisConfigProperties.THRESHOLD_UPTO_LEVEL_3;
-            }
-        } else {
-            if (PrecisConfigProperties.USE_THRESHOLD_PERCENTAGE_AFTER_LEVEL_3) {
-                //logger.info("1:" + thresholdValues[currentStage] + " 2: " + totalValue);
-                logger.info("Threshold Percentage Applied ::" + thresholdValues[currentStage] + "%");
-                return (thresholdValues[currentStage] * totalValue / 100);
-            } else {
-                logger.info("Threshold Absoulte Value Applied ::" + thresholdValues[currentStage]);
-                return thresholdValues[currentStage];
-            }
-        }
+    		return MetricListFromSchema.getMetricThreshold();
+        //if (!PrecisConfigProperties.USE_THRESHOLD_GEN) {return PrecisConfigProperties.THRESHOLD;
+//        if (currentStage <= 3) {
+//            if (PrecisConfigProperties.USE_THRESHOLD_PERCENTAGE_UPTO_LEVEL_3) {
+//                //generate percentage.
+//                logger.info("Threshold Percentage Applied ::" + PrecisConfigProperties.THRESHOLD_UPTO_LEVEL_3 + "%");
+//                return (PrecisConfigProperties.THRESHOLD_UPTO_LEVEL_3 * totalValue / 100);
+//            } else {
+//                logger.info("Threshold Absoulte Value Applied ::" + PrecisConfigProperties.THRESHOLD_UPTO_LEVEL_3);
+//                return PrecisConfigProperties.THRESHOLD_UPTO_LEVEL_3;
+//            }
+//        } else {
+//            if (PrecisConfigProperties.USE_THRESHOLD_PERCENTAGE_AFTER_LEVEL_3) {
+//                //logger.info("1:" + thresholdValues[currentStage] + " 2: " + totalValue);
+//                logger.info("Threshold Percentage Applied ::" + thresholdValues[currentStage] + "%");
+//                return (thresholdValues[currentStage] * totalValue / 100);
+//            } else {
+//                logger.info("Threshold Absoulte Value Applied ::" + thresholdValues[currentStage]);
+//                return thresholdValues[currentStage];
+//            }
+//        }
     }
 }

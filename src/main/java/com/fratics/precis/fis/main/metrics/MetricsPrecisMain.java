@@ -20,8 +20,7 @@ public class MetricsPrecisMain extends PrecisProcessor {
     public MetricsPrecisMain() {
         // Atleast 2 stages will be run, even if the configuration is less.
         ps = new PrecisProcessor[PrecisConfigProperties.NO_OF_STAGES + 3];
-        ps[0] = new PrecisSchemaProcessor(new PrecisFileStream(PrecisConfigProperties.INPUT_SCHEMA_FILE,
-                PrecisConfigProperties.SCHEMA_RECORD_SEPERATOR));
+        ps[0] = new PrecisSchemaProcessor(PrecisConfigProperties.SCHEMA);
         ps[1] = new PrecisInputCharacteristicsProcessor(new PrecisFileStream(PrecisConfigProperties.INPUT_DATA_FILE));
         ps[2] = new DimValIndex();
         ps[3] = new BitSetFeedV2(new PrecisFileStream(PrecisConfigProperties.INPUT_DATA_FILE));
