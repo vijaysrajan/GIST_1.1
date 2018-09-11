@@ -101,6 +101,7 @@ public class MetricList {
 		for (String s1 : keySet) {
 			ret.addMetricToList(s1, ml.allMetric.get(s1).doubleValue());
 		}
+		//ret.nameOfMetricForSupportThreshold = ml.nameOfMetricForSupportThreshold;
 		return ret;
 	}
 	

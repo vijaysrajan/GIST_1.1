@@ -15,6 +15,10 @@ public class FPTreeNode {
 	private static int				maxLevel = 0;						
 	
 	
+	public String getDimValName() {
+		return dimValName;
+	}
+
 	public void setNullNode(boolean nullNode) {
 		this.nullNode = nullNode;
 		level = 0;

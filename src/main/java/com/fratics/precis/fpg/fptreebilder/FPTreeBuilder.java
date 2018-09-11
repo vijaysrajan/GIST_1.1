@@ -1,6 +1,7 @@
 package com.fratics.precis.fpg.fptreebilder;
 
 import java.util.BitSet;
+import com.fratics.precis.fpg.fptreeminer.MineFPTree;
 import com.fratics.precis.exception.PrecisException;
 import java.util.Queue;
 
@@ -153,62 +154,95 @@ public class FPTreeBuilder {
 		
 	}
 	
-
+	public void mineFPTree() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = ht.getHeaderTableSize() -1 ; i >=0 ; i--) {
+			HeaderTableRecord htr = ht.get(i);
+			FPTreeNode fptn = htr.getFirstNode();
+			MineFPTree mfpt = new MineFPTree(" & ",  "," ,  "," , "\n",5);		
+			String nodeOfInterest = fptn.getDimValName();
+			while (fptn != null) {
+				sb.setLength(0);
+				FPTreeNode fptn2 = fptn.getParentNode();
+				FPTreeNode fptn3 = fptn;
+				while (fptn2.isNullNode() != true) {
+						sb.append(fptn2.getDimValName());
+						if (fptn2.getParentNode().isNullNode() != true) {
+							sb.append(" & ");
+						}
+					fptn3 = fptn3.getParentNode();
+					fptn2 = fptn2.getParentNode();
+				}
+				
+				mfpt.mineFISFromFPTree(nodeOfInterest, sb.toString(), fptn.getMetrics());
+				
+				fptn = fptn.getNextPeer();
+			}
+			System.out.print(mfpt.toString(2));
+		}
+		
+	}
+	
 	
 	
 	public static void main(String [] args) throws Exception {
 		
 		String [] inputDataArr = {
-									"t,t,,,,1",
-									"t,,t,,t,1",
-									",t,t,t,t,1",
-									",t,,t,t,1",
-									"t,t,t,,,1",
-									"t,t,t,,t,1",
-									"t,,t,,,1",
-									"t,t,t,,,1",
-									"t,t,,,t,1",
-									"t,,t,t,,1",
+									"10,t,t,,,,1",
+									"10,t,,t,,t,1",
+									"10,,t,t,t,t,1",
+									"10,,t,,t,t,1",
+									"10,t,t,t,,,1",
+									"10,t,t,t,,t,1",
+									"10,t,,t,,,1",
+									"10,t,t,t,,,1",
+									"10,t,t,,,t,1",
+									"10,t,,t,t,,1"
 		};
 
-		String [] schema = {"b","a","c","e","d","metric"};
+		String [] schema = {"additional_metric","b","a","c","e","d","metric"};
 	
 		String colSeparator = ",";
-		int [] metricIndexes = {5};
-		int metricIdxForSuppThrshldCmptn = 5;
+		int [] metricIndexes = {6,0};
+		int metricIdxForSuppThrshldCmptn = 6;
 		String [] dimValIgnoreList = {"", "null", "na", "0"};
 		int [] dimIndexesToIgnore = null;
 		String    dimToValSeparator = "=";
 		
 		
-		HeaderTableRecordElement htre1 = new HeaderTableRecordElement("a", "t",dimToValSeparator, 0 );		
+		HeaderTableRecordElement htre1 = new HeaderTableRecordElement("a", "t",dimToValSeparator, 1 );		
 		MetricList ml = new MetricList();
-		ml.addMetricToList("metric", 8, true);
+		ml.addMetricToList("metric", 8, false);
+		ml.addMetricToList("additional_metric", 80, true);
 		HeaderTableRecord htr1 = new HeaderTableRecord(htre1,ml);
 		HeaderTable ht = new HeaderTable();
 		ht.add(htr1);
 		
-		htre1 = new HeaderTableRecordElement("b", "t",dimToValSeparator, 1);		
+		htre1 = new HeaderTableRecordElement("b", "t",dimToValSeparator, 2);		
 		ml = new MetricList();
-		ml.addMetricToList("metric", 6, true);
+		ml.addMetricToList("metric", 6, false);
+		ml.addMetricToList("additional_metric", 60, true);
 		htr1 = new HeaderTableRecord(htre1,ml);
 		ht.add(htr1);
 		
-		htre1 = new HeaderTableRecordElement("c", "t",dimToValSeparator, 2);		
+		htre1 = new HeaderTableRecordElement("c", "t",dimToValSeparator, 3);		
 		ml = new MetricList();
-		ml.addMetricToList("metric", 5, true);
+		ml.addMetricToList("metric", 5, false);
+		ml.addMetricToList("additional_metric", 50, true);
 		htr1 = new HeaderTableRecord(htre1,ml);
 		ht.add(htr1);
 		
-		htre1 = new HeaderTableRecordElement("d", "t",dimToValSeparator, 3);		
+		htre1 = new HeaderTableRecordElement("d", "t",dimToValSeparator, 4);		
 		ml = new MetricList();
-		ml.addMetricToList("metric", 5, true);
+		ml.addMetricToList("metric", 5, false);
+		ml.addMetricToList("additional_metric", 50, true);
 		htr1 = new HeaderTableRecord(htre1,ml);
 		ht.add(htr1);
 		
-		htre1 = new HeaderTableRecordElement("e", "t",dimToValSeparator, 4);		
+		htre1 = new HeaderTableRecordElement("e", "t",dimToValSeparator, 5);		
 		ml = new MetricList();
-		ml.addMetricToList("metric", 3, true);
+		ml.addMetricToList("metric", 3, false);
+		ml.addMetricToList("additional_metric", 30, true);
 		htr1 = new HeaderTableRecord(htre1,ml);
 		ht.add(htr1);
 		
@@ -222,27 +256,15 @@ public class FPTreeBuilder {
 					           dimToValSeparator);
 		}
 		
+		fptb.mineFPTree();
 		
-		//schema and data swapping many dimensions gives the same results
-		//Check from the header table if all nodes get connected
-		//test having more than one metric
-		//try with different metric index
+		//schema and data swapping many dimensions gives the same results - done
+		//Check from the header table if all nodes get connected - yes they do
+		//test having more than one metric - done
+		//try with different metric index - done
 		
-		for (int i = ht.getHeaderTableSize() -1 ; i >=0 ; i--) {
-			HeaderTableRecord htr = ht.get(i);
-			FPTreeNode fptn = htr.getFirstNode();
-			while (fptn != null) {
-				FPTreeNode fptn2 = fptn;
-				while (fptn2.isNullNode() != true) {
-					System.out.print(fptn2.toString() + "<-");
-					fptn2 = fptn2.getParentNode();
-				}
-				System.out.println();
-				fptn = fptn.getNextPeer();
-			}
 
-		}
-		System.out.println(FPTreeNode.getMaxLevel());
+		//System.out.println(FPTreeNode.getMaxLevel());
 	}
 	
 	
