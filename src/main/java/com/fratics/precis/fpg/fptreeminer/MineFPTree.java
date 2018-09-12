@@ -107,7 +107,7 @@ public class MineFPTree {
 				//System.out.println(entry.getKey() + ":" + entry.getValue().getSupportMetricValue() );
 				sb.append(entry.getKey());
 				sb.append(this.separatorBetwnRuleAndMetric);
-				sb.append(entry.getValue().toString());
+				sb.append(entry.getValue().toString(this.separatorBetwnRuleAndMetric));
 				sb.append(this.separatorBetwnSuccessiveFIS);
 				
 			}

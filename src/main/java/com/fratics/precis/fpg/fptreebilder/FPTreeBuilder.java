@@ -3,7 +3,6 @@ package com.fratics.precis.fpg.fptreebilder;
 import java.util.BitSet;
 import com.fratics.precis.fpg.fptreeminer.MineFPTree;
 import com.fratics.precis.exception.PrecisException;
-import java.util.Queue;
 
 public class FPTreeBuilder {
 	private static HeaderTable 		ht         = null;
@@ -26,7 +25,8 @@ public class FPTreeBuilder {
 	private boolean isDimIgnored(int idx, int [] dimIndexesToIgnore) {
 		if (dimIndexesToIgnore == null) return false;
 		for (int i = 0; i < dimIndexesToIgnore.length; i++) {
-			if (dimIndexesToIgnore[i] == idx) return true;
+			if (dimIndexesToIgnore[i] == idx) 
+				return true;
 		}
 		return false;
 	}
@@ -154,12 +154,22 @@ public class FPTreeBuilder {
 		
 	}
 	
-	public void mineFPTree() {
+	public void mineFPTree(
+  			  String separatorBetwnSuccessiveDimVal, 
+	          String separatorBetwnlevelAndRule,
+	          String separatorBetwnRuleAndMetric,
+	          String separatorBetwnSuccessiveFIS,
+	          int numberOfStages
+			) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = ht.getHeaderTableSize() -1 ; i >=0 ; i--) {
 			HeaderTableRecord htr = ht.get(i);
 			FPTreeNode fptn = htr.getFirstNode();
-			MineFPTree mfpt = new MineFPTree(" & ",  "," ,  "," , "\n",5);		
+			if (fptn == null) {
+				continue;
+			}
+			//MineFPTree mfpt = new MineFPTree(" & ",  "," ,  "," , "\n",5);
+			MineFPTree mfpt = new MineFPTree(separatorBetwnSuccessiveDimVal, separatorBetwnlevelAndRule, separatorBetwnRuleAndMetric, separatorBetwnSuccessiveFIS, numberOfStages);
 			String nodeOfInterest = fptn.getDimValName();
 			while (fptn != null) {
 				sb.setLength(0);
@@ -188,16 +198,17 @@ public class FPTreeBuilder {
 	public static void main(String [] args) throws Exception {
 		
 		String [] inputDataArr = {
+									"10,t,t,t,,,1",
+									"10,t,t,t,,t,1",
+									"10,t,,t,t,,1",
+									"10,t,,t,,,1",
+									"10,t,t,t,,,1",
 									"10,t,t,,,,1",
 									"10,t,,t,,t,1",
 									"10,,t,t,t,t,1",
 									"10,,t,,t,t,1",
-									"10,t,t,t,,,1",
-									"10,t,t,t,,t,1",
-									"10,t,,t,,,1",
-									"10,t,t,t,,,1",
 									"10,t,t,,,t,1",
-									"10,t,,t,t,,1"
+									
 		};
 
 		String [] schema = {"additional_metric","b","a","c","e","d","metric"};
@@ -206,11 +217,11 @@ public class FPTreeBuilder {
 		int [] metricIndexes = {6,0};
 		int metricIdxForSuppThrshldCmptn = 6;
 		String [] dimValIgnoreList = {"", "null", "na", "0"};
-		int [] dimIndexesToIgnore = null;
+		int [] dimIndexesToIgnore = {};
 		String    dimToValSeparator = "=";
 		
 		
-		HeaderTableRecordElement htre1 = new HeaderTableRecordElement("a", "t",dimToValSeparator, 1 );		
+		HeaderTableRecordElement htre1 = new HeaderTableRecordElement("b", "t",dimToValSeparator, 1 );		
 		MetricList ml = new MetricList();
 		ml.addMetricToList("metric", 8, false);
 		ml.addMetricToList("additional_metric", 80, true);
@@ -218,10 +229,10 @@ public class FPTreeBuilder {
 		HeaderTable ht = new HeaderTable();
 		ht.add(htr1);
 		
-		htre1 = new HeaderTableRecordElement("b", "t",dimToValSeparator, 2);		
+		htre1 = new HeaderTableRecordElement("a", "t",dimToValSeparator, 2);		
 		ml = new MetricList();
-		ml.addMetricToList("metric", 6, false);
-		ml.addMetricToList("additional_metric", 60, true);
+		ml.addMetricToList("metric", 7, false);
+		ml.addMetricToList("additional_metric", 70, true);
 		htr1 = new HeaderTableRecord(htre1,ml);
 		ht.add(htr1);
 		
@@ -256,14 +267,12 @@ public class FPTreeBuilder {
 					           dimToValSeparator);
 		}
 		
-		fptb.mineFPTree();
+		fptb.mineFPTree(" & ",  "," ,  "," , "\n",5);
 		
 		//schema and data swapping many dimensions gives the same results - done
 		//Check from the header table if all nodes get connected - yes they do
 		//test having more than one metric - done
 		//try with different metric index - done
-		
-
 		//System.out.println(FPTreeNode.getMaxLevel());
 	}
 	

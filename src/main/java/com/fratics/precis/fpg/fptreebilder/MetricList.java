@@ -10,6 +10,30 @@ public class MetricList {
 	private static HashMap<String,Double> referenceMetricList = null;
 	private static String staticNameOfMetricForSupportThreshold = null;
 	
+
+	
+	
+	public static MetricList makeReplica(MetricList ml) {
+		MetricList ret = makeBlankMetricList();
+		Set<String> keySet = ml.allMetric.keySet();
+		for (String s1 : keySet) {
+			ret.addMetricToList(s1, ml.allMetric.get(s1).doubleValue());
+		}
+		//ret.nameOfMetricForSupportThreshold = ml.nameOfMetricForSupportThreshold;
+		return ret;
+	}
+	
+	public static MetricList makeBlankMetricList() {
+		MetricList ret_ml = new MetricList();
+		Set<String> keySet = referenceMetricList.keySet();
+		for (String s : keySet) {
+			ret_ml.addMetricToList(s, 0.0);
+		}
+		ret_ml.nameOfMetricForSupportThreshold = MetricList.staticNameOfMetricForSupportThreshold;
+		return ret_ml;
+	}	
+	
+	
 	
 	public double getSupportMetricValue() {
 		return allMetric.get(nameOfMetricForSupportThreshold).doubleValue();
@@ -40,18 +64,7 @@ public class MetricList {
 			this.allMetric = new HashMap<String,Double>();
 		}
 		allMetric.put(metricName, metric);
-	}
-	
-	public static MetricList makeBlankMetricList() {
-		MetricList ret_ml = new MetricList();
-		Set<String> keySet = referenceMetricList.keySet();
-		for (String s : keySet) {
-			ret_ml.addMetricToList(s, 0.0);
-		}
-		ret_ml.nameOfMetricForSupportThreshold = MetricList.staticNameOfMetricForSupportThreshold;
-		return ret_ml;
-	}
-	
+	}	
 	
 //	public int size() {
 //		return allMetric.size();
@@ -94,15 +107,22 @@ public class MetricList {
 		}
 		return sb.toString();
 	}
-	
-	public static MetricList makeReplica(MetricList ml) {
-		MetricList ret = makeBlankMetricList();
-		Set<String> keySet = ml.allMetric.keySet();
+
+	public String toString(String separatorBetwnMetrics) {
+		StringBuilder sb = new StringBuilder();
+		
+		Set<String> keySet = allMetric.keySet();
+		int sz = keySet.size();
+		int i = 0;
 		for (String s1 : keySet) {
-			ret.addMetricToList(s1, ml.allMetric.get(s1).doubleValue());
+			sb.append(allMetric.get(s1));
+			if (i < (sz -1)) {
+				sb.append(separatorBetwnMetrics);
+			}
+			i++;
 		}
-		//ret.nameOfMetricForSupportThreshold = ml.nameOfMetricForSupportThreshold;
-		return ret;
+		return sb.toString();
 	}
 	
+
 }
