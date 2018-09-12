@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 //import java.util.Collections;
 import java.util.Map;
+import java.util.Arrays;
 
 public class MineFPTree {
 	
@@ -60,12 +61,12 @@ public class MineFPTree {
 			return;
 		} else  {
 			for (int i = 0; i <= this.numberOfStages && i <= this.prefixParts.length; i++) {
-				createFIS2(0,this.prefixParts.length - i + 1,new ArrayList<String>(),0,i);
+				createFIS(0,this.prefixParts.length - i + 1,new ArrayList<String>(),0,i);
 			}
 		}
 	}	
 	
-	private void createFIS2(int from,
+	private void createFIS(int from,
 			   int to,
 			   ArrayList<String> fis,
 			   int nestLoopCount,
@@ -95,17 +96,36 @@ public class MineFPTree {
 		}
 		for (int i = from; i < to; i++) {
 			fis.add(prefixParts[i]);
-			createFIS2(i+1,to+1,fis,nestLoopCount + 1,r);
+			createFIS(i+1,to+1,fis,nestLoopCount + 1,r);
 			fis.remove(fis.size() - 1);
 		}
 	}
+	
+	private static StringBuilder sbReOrder = new StringBuilder();
+	public static String reOrderLexicographically ( String str, String separator1st,  String separator2nd) {
+		sbReOrder.setLength(0);
+		String [] splitter =  str.split(separator1st, -1);
+		String [] splitter2 = splitter[1].split(separator2nd, -1);
+		Arrays.sort(splitter2);
+		sbReOrder.append(splitter[0]);
+		sbReOrder.append(separator1st);
+		for (int i = 0; i < splitter2.length; i++) {
+			sbReOrder.append(splitter2[i]);
+			if (i < (splitter2.length - 1)) {
+				sbReOrder.append(separator2nd);
+			}
+		}
+		return sbReOrder.toString();
+	}
+	
 	
 	public String toString (double supportThreshold) {
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, MetricList> entry : this.FIS.entrySet()) {
 			if (entry.getValue().getSupportMetricValue() >= supportThreshold) {
 				//System.out.println(entry.getKey() + ":" + entry.getValue().getSupportMetricValue() );
-				sb.append(entry.getKey());
+				
+				sb.append(MineFPTree.reOrderLexicographically(entry.getKey(), this.separatorBetwnlevelAndRule, this.separatorBetwnSuccessiveDimVal));
 				sb.append(this.separatorBetwnRuleAndMetric);
 				sb.append(entry.getValue().toString(this.separatorBetwnRuleAndMetric));
 				sb.append(this.separatorBetwnSuccessiveFIS);
@@ -117,7 +137,7 @@ public class MineFPTree {
 	
 	
 	public static void main(String [] args) {
-		MineFPTree mfpt = new MineFPTree(" & ", "," , ";","~~", 5);
+		MineFPTree mfpt = new MineFPTree(" & ", "," , ";","\n", 5);
 		MetricList ml = new MetricList();
 		ml.addMetricToList("imp", 45, true);
 		mfpt.mineFISFromFPTree("f=t", "a=t & b=t & c=t & d=t & e=t",ml);
