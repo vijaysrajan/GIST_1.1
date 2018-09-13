@@ -10,8 +10,6 @@ public class MetricList {
 	private static HashMap<String,Double> referenceMetricList = null;
 	private static String staticNameOfMetricForSupportThreshold = null;
 	
-
-	
 	
 	public static MetricList makeReplica(MetricList ml) {
 		MetricList ret = makeBlankMetricList();
@@ -66,9 +64,6 @@ public class MetricList {
 		allMetric.put(metricName, metric);
 	}	
 	
-//	public int size() {
-//		return allMetric.size();
-//	}
 	public void updateMetricList(MetricList ml) {
 		if (allMetric == null) {
 			this.allMetric = new HashMap<String,Double>();
@@ -95,34 +90,47 @@ public class MetricList {
 		return staticNameOfMetricForSupportThreshold;
 	}
 	
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		
-		Set<String> keySet = allMetric.keySet();
-		for (String s1 : keySet) {
-			sb.append(s1);
-			sb.append("=");
-			sb.append(allMetric.get(s1));
-			sb.append("::");
-		}
-		return sb.toString();
-	}
-
-	public String toString(String separatorBetwnMetrics) {
-		StringBuilder sb = new StringBuilder();
-		
+	StringBuilder tmpSB = new StringBuilder();
+	public String getMetricNameHeader(String separatorBetwnMetrics) {
+		tmpSB.setLength(0);
 		Set<String> keySet = allMetric.keySet();
 		int sz = keySet.size();
 		int i = 0;
 		for (String s1 : keySet) {
-			sb.append(allMetric.get(s1));
+			this.tmpSB.append(s1);
 			if (i < (sz -1)) {
-				sb.append(separatorBetwnMetrics);
+				this.tmpSB.append(separatorBetwnMetrics);
 			}
 			i++;
 		}
-		return sb.toString();
+		return this.tmpSB.toString();
 	}
 	
+	public String toString() {
+		this.tmpSB.setLength(0);
+		Set<String> keySet = allMetric.keySet();
+		for (String s1 : keySet) {
+			this.tmpSB.append(s1);
+			this.tmpSB.append("=");
+			this.tmpSB.append(allMetric.get(s1));
+			this.tmpSB.append("::");
+		}
+		return this.tmpSB.toString();
+	}
+
+	public String toString(String separatorBetwnMetrics) {
+		this.tmpSB.setLength(0);	
+		Set<String> keySet = allMetric.keySet();
+		int sz = keySet.size();
+		int i = 0;
+		for (String s1 : keySet) {
+			this.tmpSB.append(allMetric.get(s1));
+			if (i < (sz -1)) {
+				this.tmpSB.append(separatorBetwnMetrics);
+			}
+			i++;
+		}
+		return this.tmpSB.toString();
+	}	
 
 }

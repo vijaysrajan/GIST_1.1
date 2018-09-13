@@ -37,6 +37,21 @@ public class MineFPTree {
 		this.numberOfStages = numberOfStages;
 	}
 	
+	public String getSeparatorBetwnSuccessiveDimVal() {
+		return separatorBetwnSuccessiveDimVal;
+	}
+
+	public String getSeparatorBetwnlevelAndRule() {
+		return separatorBetwnlevelAndRule;
+	}
+
+	public String getSeparatorBetwnRuleAndMetric() {
+		return separatorBetwnRuleAndMetric;
+	}
+
+	public String getSeparatorBetwnSuccessiveFIS() {
+		return separatorBetwnSuccessiveFIS;
+	}
 	
 	public void mineFISFromFPTree(String headerTableEntryDimValName, 
 			                      String prefix, 
@@ -133,8 +148,7 @@ public class MineFPTree {
 			}
 		}
 		return sb.toString();
-} 
-	
+} 	
 	
 	public static void main(String [] args) {
 		MineFPTree mfpt = new MineFPTree(" & ", "," , ";","\n", 5);
@@ -150,6 +164,7 @@ public class MineFPTree {
 		MetricList ml3 = new MetricList();
 		ml3.addMetricToList("imp", 1, true);
 		mfpt.mineFISFromFPTree("f=t", "",ml3);
+		
 		System.out.println(mfpt.toString(2));
 	}
 	

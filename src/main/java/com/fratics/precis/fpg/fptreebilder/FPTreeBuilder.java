@@ -178,7 +178,7 @@ public class FPTreeBuilder {
 				while (fptn2.isNullNode() != true) {
 						sb.append(fptn2.getDimValName());
 						if (fptn2.getParentNode().isNullNode() != true) {
-							sb.append(" & ");
+							sb.append(separatorBetwnSuccessiveDimVal);
 						}
 					fptn3 = fptn3.getParentNode();
 					fptn2 = fptn2.getParentNode();
@@ -188,11 +188,26 @@ public class FPTreeBuilder {
 				
 				fptn = fptn.getNextPeer();
 			}
+			//here write to the output file
 			System.out.print(mfpt.toString(2));
 		}
 		
 	}
 	
+	
+	public String printHeader (MetricList ml, 
+							  String separatorBetwnMetrics, 
+					          String separatorBetwnlevelAndRule,
+					          String separatorBetwnRuleAndMetric
+					          ) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Level");
+		sb.append(separatorBetwnlevelAndRule);
+		sb.append("Rule");
+		sb.append(separatorBetwnRuleAndMetric);
+		sb.append(ml.getMetricNameHeader(separatorBetwnMetrics));
+		return sb.toString();
+	}
 	
 	
 	public static void main(String [] args) throws Exception {
@@ -267,7 +282,11 @@ public class FPTreeBuilder {
 					           dimToValSeparator);
 		}
 		
+		
+		System.out.println(fptb.printHeader(ml, ",", ",",  ","));
 		fptb.mineFPTree(" & ",  "," ,  "," , "\n",5);
+		
+		
 		
 		//schema and data swapping many dimensions gives the same results - done
 		//Check from the header table if all nodes get connected - yes they do
