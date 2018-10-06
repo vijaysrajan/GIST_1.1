@@ -7,7 +7,7 @@ import java.io.RandomAccessFile;
 public class Util {
 
     public static boolean isIgnoredWord(String s) {
-        return FPGConfig.IGN_WORDS.contains(s);
+        return FPGConfig.IGNORE_VALUES.contains(s);
     }
 
     public static String generateRandomId() {
@@ -16,9 +16,7 @@ public class Util {
 
     private static RandomAccessFile openFile () throws Exception {
 		StringBuilder fullpathFileName = new StringBuilder();
-		fullpathFileName.append(FPGConfig.OUTPUT_DIR);
-		fullpathFileName.append("/");
-		fullpathFileName.append(FPGConfig.GIST_OUPUT_CANDIDATE_FILE);
+		fullpathFileName.append(FPGConfig.OUPUT_FILE);
         RandomAccessFile pw = new RandomAccessFile(fullpathFileName.toString(), "rw");
         return pw;
     }
@@ -39,5 +37,4 @@ public class Util {
     private static void closeFile (RandomAccessFile pw) throws Exception {
     		pw.close();
     }
-    
 }
