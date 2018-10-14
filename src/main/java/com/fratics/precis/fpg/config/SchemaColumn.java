@@ -10,6 +10,7 @@ public class SchemaColumn {
 	private int columnNumber = -1;
 	private boolean isColumnTracked = true;
 	private DATATYPE dataType = DATATYPE.DOUBLE;
+	//if computed but threshold not applied longThreshold && doubleThreshold will be null
 	private MetricThresholds<Long> longThreshold = null;
 	private MetricThresholds<Double> doubleThreshold = null;
 	
@@ -53,5 +54,28 @@ public class SchemaColumn {
 		longThreshold = new MetricThresholds<Long>(new Long(l) );
 	}
 	
+	public boolean colIsMetricOrCountAndHasThreshold() {
+		if ( (type == TYPE.METRIC || type == TYPE.COUNT) && (doubleThreshold != null || longThreshold != null)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public double getDoubleThreshold() {
+		if (doubleThreshold != null) {
+			return doubleThreshold.getThreshold();
+		} else {
+			return -1;
+		}
+	}
+	
+	public long getLongThreshold() {
+		if (longThreshold != null) {
+			return longThreshold.getThreshold();
+		} else {
+			return -1;
+		}
+	}
 	
 }

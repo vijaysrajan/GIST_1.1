@@ -14,15 +14,15 @@ public class Util {
         return Integer.toString((int) (Math.random() * 100000));
     }
 
-    private static RandomAccessFile openFile () throws Exception {
+    public static RandomAccessFile openFile (String s) throws Exception {
 		StringBuilder fullpathFileName = new StringBuilder();
-		fullpathFileName.append(FPGConfig.OUPUT_FILE);
+		fullpathFileName.append(s);//FPGConfig.OUPUT_FILE);
         RandomAccessFile pw = new RandomAccessFile(fullpathFileName.toString(), "rw");
         return pw;
     }
     
     
-    private static void writeCandidatesToOutputFile(String fisLine, RandomAccessFile pw) throws Exception {    	
+    public static void writeCandidatesToOutputFile(String fisLine, RandomAccessFile pw) throws Exception {    	
         try {
     				//File f = new File(fullpathFileName.toString());
     				//long fileLength = f.length();
@@ -34,7 +34,7 @@ public class Util {
         }
     }
     
-    private static void closeFile (RandomAccessFile pw) throws Exception {
+    public static void closeFile (RandomAccessFile pw) throws Exception {
     		pw.close();
     }
 }

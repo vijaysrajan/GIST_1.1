@@ -8,6 +8,7 @@ import com.fratics.precis.exception.PrecisException;
 public class FPGConfig {
 	
     public static String INPUT_DATA_FILE = "./data/dataFile";
+    public static String BAD_FATA_FILE="./data/badDataFile";
     public static String OUPUT_FILE="./data/fis_output.csv";
     public static String INPUT_RECORD_SEPERATOR = Character.toString('\001');	
     public static String SEPERATOR_BETWEEN_SUCCESSIVE_DIMVALS="  ~and~  ";
@@ -27,8 +28,16 @@ public class FPGConfig {
     public static HashMap<String,HashSet<String>> HIERARCHY_DIM_GROUPS = new HashMap<String,HashSet<String>>();   
     public static boolean LOGGING_ENABLED = true;
     public static String LOGGING_LEVEL = "INFO";
+    
     public static SchemaProcessor schemaInstance = new SchemaProcessor();
+    
+    private static boolean isInitialized = false;
 
+    public static boolean isInitialized() {
+    		return isInitialized;
+    }
+    
+    
 
     private static String convertSpecialChar(String s) {
         if (s.charAt(0) == '\\' && s.charAt(1) == 'u') {
@@ -47,26 +56,30 @@ public class FPGConfig {
     }
 
     public static void init() throws Exception {
-        FPGConfigObject c = new FPGConfigObject();
-        c.initialize();
-        loadConfig(c);
+    		if (isInitialized  == false) {
+    			FPGConfigObject c = new FPGConfigObject();
+    			c.initialize();
+    			loadConfig(c);
+    			isInitialized = true;
+    		} else {
+    			throw new PrecisException("FPG Config is already initialized.");
+    		}
     }
     
     private static void readParseAndPopulateFromSchemaConfigParam (String schema) throws Exception{
-    		//TBD 
-	    	//	d:source:t;\
-	    	//	d:estimated_usage_bins:t;\
-	    	//	d:city:t;\
-	    	//	d:zone:t;\
-	    	//	d:zone_demand_popularity:t;\
-	    	//	d:dayType:t;\
-	    	//	d:pickUpHourOfDay:t;\
-	    	//	d:sla:t;\
-	    	//	d:booking_type:t;\
-	    	//	m:DU_Bad_Count:double:t:20;\
-	    	//	m:DU_No_Bad_Count:double:t:20;\
-	    	//	m:cnt:long:t:25;\
-	    	//	C:_GISTcountThreshold:long:t:10	
+		//    	d:source:t;\
+		//    	d:estimated_usage_bins:t;\
+		//    	d:city:t;\
+		//    	d:zone:t;\
+		//    	d:zone_demand_popularity:t;\
+		//    	d:dayType:t;\
+		//    	d:pickUpHourOfDay:t;\
+		//    	d:sla:t;\
+		//    	d:booking_type:t;\
+		//    	m:DU_Bad_Count:double:t:20;\
+		//    	m:DU_No_Bad_Count:double:t:20;\
+		//    	m:cnt:long:f;\
+		//    	C:_GISTcountThreshold:long:t
 		String [] splitter1 = schema.split(";",-1);
 		for (String s1 : splitter1) {
 			String [] splitter2 = s1.split(":", -1);
@@ -83,16 +96,16 @@ public class FPGConfig {
 			} else if (splitter2[0].equalsIgnoreCase("m")) {
 				schemaInstance.addColumn( splitter2[1], 
 									      splitter2[0], 
-									      (splitter2[3].equalsIgnoreCase(""))?true:false,
+									      (splitter2[3].equalsIgnoreCase("t"))?true:false,
 									      splitter2[2],
-									      splitter2[4]
+									      (splitter2.length >= 5)?splitter2[4]:null
 									    	);
 			} else if (splitter2[0].equalsIgnoreCase("c")) {
 				schemaInstance.addColumn( splitter2[1], 
                                           splitter2[0], 
-					      				 (splitter2[3].equalsIgnoreCase(""))?true:false,
+					      				 (splitter2[3].equalsIgnoreCase("t"))?true:false,
 					                      splitter2[2],
-					    	                  splitter2[4]
+					                      (splitter2.length >= 5)?splitter2[4]:null
 					                    );
 			} else {
 				throw new PrecisException("Schema has column type which is incorrect. " +  splitter2[0]);
@@ -101,7 +114,6 @@ public class FPGConfig {
 		
 		
 		//schemaInstance
-    		
     }
     
     private static void readAndPopulateIgnoreValueHashSet (String str) {
@@ -155,36 +167,33 @@ public class FPGConfig {
     
     public static void loadConfig(FPGConfigObject c) throws Exception{
     	
-    	
-
-		//        String tmp = c.getProperties().getProperty("INPUT_DATA_FILE");
-		//        if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
-		//            INPUT_DATA_FILE = tmp;
-		//        }
-
-    		//populateStringConfigVariable(c, INPUT_DATA_FILE, "INPUT_DATA_FILE");
         String tmp = c.getProperties().getProperty("INPUT_DATA_FILE");
         if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
         		INPUT_DATA_FILE = tmp;
         }
-        //populateStringConfigVariable(c, OUPUT_FILE, "OUPUT_FILE");
+        
+        tmp = c.getProperties().getProperty("BAD_FATA_FILE");
+        if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
+        		BAD_FATA_FILE = tmp;
+        }
+            
         tmp = c.getProperties().getProperty("OUPUT_FILE");
         if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
         		OUPUT_FILE = tmp;
         }
-        //populateStringConfigVariable(c, INPUT_RECORD_SEPERATOR, "INPUT_RECORD_SEPERATOR");
+
         tmp = c.getProperties().getProperty("INPUT_RECORD_SEPERATOR");
         String s = convertSpecialChar(tmp);
         if (s != null) {
         		INPUT_RECORD_SEPERATOR = tmp;
         }
-        //populateStringConfigVariableWithSpecialChars(c, SEPERATOR_BETWEEN_SUCCESSIVE_DIMVALS, "SEPERATOR_BETWEEN_SUCCESSIVE_DIMVALS");
+
         tmp = c.getProperties().getProperty("SEPERATOR_BETWEEN_SUCCESSIVE_DIMVALS");
         s = convertSpecialChar(tmp);
         if (s != null) {
         		SEPERATOR_BETWEEN_SUCCESSIVE_DIMVALS = tmp;
         }
-		//populateStringConfigVariableWithSpecialChars(c, SEPARATOR_BETWEEN_DIM_AND_VAL, "SEPARATOR_BETWEEN_DIM_AND_VAL");
+
         tmp = c.getProperties().getProperty("SEPARATOR_BETWEEN_DIM_AND_VAL");
         s = convertSpecialChar(tmp);
         if (s != null) {
@@ -277,7 +286,6 @@ public class FPGConfig {
     public static void main (String [] args) throws Exception {
     		FPGConfig.init();
     		System.out.println("Done");
-    		
     }
     
 
