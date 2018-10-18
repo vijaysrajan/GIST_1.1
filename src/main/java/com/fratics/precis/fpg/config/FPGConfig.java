@@ -17,7 +17,7 @@ public class FPGConfig {
     public static String SEPARATOR_BETWEEN_SUCCESSIVE_METRICS=" , ";
     public static String SEPERATOR_BETWEEN_STAGENUMBER_AND_FIS=" , ";
     public static String SCHEMA = "";
-    public static long   NO_OF_STAGES = 5;
+    public static int   NO_OF_STAGES = 5;
     public static long   GIST_MAX_NUMBER_OF_INSIGHTS=4000000;
     private static String IGNORE_VALUES_TEMP = "null,";
     public static HashSet<String> IGNORE_VALUES = new HashSet<String>(Arrays.asList("null", "", "0"));
@@ -231,7 +231,7 @@ public class FPGConfig {
         tmp = c.getProperties().getProperty("NO_OF_STAGES");
         if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
             try {
-                NO_OF_STAGES = Long.parseLong(tmp);
+                NO_OF_STAGES = Integer.parseInt(tmp);
                 if (NO_OF_STAGES <= 0)
                     NO_OF_STAGES = 1;
             } catch (NumberFormatException e) {

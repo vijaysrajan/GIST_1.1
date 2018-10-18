@@ -35,8 +35,21 @@ public class HeaderTable {
 	}
 	
 	public int getInt(String s) {
-		//System.out.println(s);
-		return lookupIndex.get(s);
+		try {
+			if (lookupIndex == null) {
+				System.out.println(s);
+				return -1;
+			}
+			return lookupIndex.get(s).intValue();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return -1;
+		}
+		
+	}
+	
+	public boolean hasDimVal(String s) {
+		return lookupIndex.containsKey(s);
 	}
 	
 	public HeaderTableRecord get(String s) {

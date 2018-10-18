@@ -2,6 +2,8 @@ package com.fratics.precis.fpg.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+
 import com.fratics.precis.exception.PrecisException;
 
 
@@ -10,9 +12,12 @@ public class SchemaProcessor {
 	private ArrayList<SchemaColumn>      arrayListColumns = new ArrayList<SchemaColumn>();
 	private HashMap<String,SchemaColumn> hashMapColumns   = new HashMap<String,SchemaColumn>();
 	private int colNumber = -1;
-	private Boolean hasLongMetricToSum = null;
-	private Boolean hasDoubleMetricToSum = null;
+	//private Boolean hasLongMetricToSum = null;
+	private Boolean hasMetricToSum = null;
 	private boolean hasCountColumn = false;
+	private int omittedDimCount = 0;
+	private int [] dimsToIgnore = null;
+	private HashSet<Integer> dimsToIgnoreHashSet = null;
 	
 	
 	//	d:source:t;\
@@ -76,6 +81,10 @@ public class SchemaProcessor {
 		sc.setType(type);
 		sc.setColumnNumber(colNumber++);
 		sc.setColumnTracked(_tracked);
+		if (_tracked == false) {
+			omittedDimCount++;
+		}
+		
 		hashMapColumns.put(colName, sc);
 		arrayListColumns.add(sc);
 	}
@@ -93,6 +102,11 @@ public class SchemaProcessor {
 		return (hashMapColumns.get(name).getType() == SchemaColumn.TYPE.METRIC)?true:false;
 	}
 	
+	public int getIndexOfDimInSchema(String dimName) {
+		return hashMapColumns.get(dimName).getColumnNumber();
+	}
+	
+	
 	public boolean isColumnAMetric(int colNumber) {
 		return (arrayListColumns.get(colNumber).getType() == SchemaColumn.TYPE.METRIC)?true:false;
 	}
@@ -102,46 +116,46 @@ public class SchemaProcessor {
 	}
 	
 	public boolean doesSchemaHaveADoubleMetricWithThreshold() {
-		if ( (hasDoubleMetricToSum == null) && (arrayListColumns != null)  && (arrayListColumns.size() > 0) ) {
+		if ( (hasMetricToSum == null) && (arrayListColumns != null)  && (arrayListColumns.size() > 0) ) {
 			boolean isValSet = false;
-			hasDoubleMetricToSum = new Boolean(false);
+			hasMetricToSum = new Boolean(false);
 			for (int i = 0; i < arrayListColumns.size(); i++) {
 				if ( 
 					this.arrayListColumns.get(i).colIsMetricOrCountAndHasThreshold() &&
 					arrayListColumns.get(i).isColumnTracked() && 
 					(arrayListColumns.get(i).getDataType() == SchemaColumn.DATATYPE.DOUBLE)) {
-					hasDoubleMetricToSum = true;
+					hasMetricToSum = true;
 					isValSet = true;
 					break;
 				}
 			}
 			if (isValSet == false) {
-				hasDoubleMetricToSum = false;
+				hasMetricToSum = false;
 			}
 		}
-		return hasDoubleMetricToSum;
+		return hasMetricToSum;
 	}
 	
-	public boolean doesSchemaHaveALongMetricWithThreshold() {
-		if ( (hasLongMetricToSum == null) && (arrayListColumns != null)  && (arrayListColumns.size() > 0) ) {
-			boolean isValSet = false;
-			hasLongMetricToSum = new Boolean(false);
-			for (int i = 0; i < arrayListColumns.size(); i++) {
-				if (this.arrayListColumns.get(i).colIsMetricOrCountAndHasThreshold() && 
-					arrayListColumns.get(i).colIsMetricOrCountAndHasThreshold() &&
-					arrayListColumns.get(i).isColumnTracked() && 
-					(arrayListColumns.get(i).getDataType() == SchemaColumn.DATATYPE.LONG)) {
-					hasLongMetricToSum = true;
-					isValSet = true;
-					break;
-				}
-			}
-			if (isValSet == false) {
-				hasLongMetricToSum = false;
-			}
-		}
-		return hasLongMetricToSum;
-	}
+//	public boolean doesSchemaHaveALongMetricWithThreshold() {
+//		if ( (hasLongMetricToSum == null) && (arrayListColumns != null)  && (arrayListColumns.size() > 0) ) {
+//			boolean isValSet = false;
+//			hasLongMetricToSum = new Boolean(false);
+//			for (int i = 0; i < arrayListColumns.size(); i++) {
+//				if (this.arrayListColumns.get(i).colIsMetricOrCountAndHasThreshold() && 
+//					arrayListColumns.get(i).colIsMetricOrCountAndHasThreshold() &&
+//					arrayListColumns.get(i).isColumnTracked() && 
+//					(arrayListColumns.get(i).getDataType() == SchemaColumn.DATATYPE.LONG)) {
+//					hasLongMetricToSum = true;
+//					isValSet = true;
+//					break;
+//				}
+//			}
+//			if (isValSet == false) {
+//				hasLongMetricToSum = false;
+//			}
+//		}
+//		return hasLongMetricToSum;
+//	}
 	
 	public int [] getMetricsIndexes() {
 		ArrayList<Integer> retVal = new ArrayList<Integer> ();
@@ -168,7 +182,7 @@ public class SchemaProcessor {
 	public int [] getThresholdIndexes() {
 		ArrayList<Integer> retVal = new ArrayList<Integer> ();
 		for (int i = 0; i < arrayListColumns.size(); i++) {
-			if ( (arrayListColumns.get(i).getDoubleThreshold() >=0 || arrayListColumns.get(i).getLongThreshold() >= 0 ) && 
+			if ( (arrayListColumns.get(i).getThreshold() >=0 ) && 
 				 (arrayListColumns.get(i).isColumnTracked() ) && 
 				 (arrayListColumns.get(i).getType() == SchemaColumn.TYPE.METRIC || 
 				 arrayListColumns.get(i).getType() == SchemaColumn.TYPE.COUNT)) {
@@ -199,6 +213,74 @@ public class SchemaProcessor {
 		return arrayListColumns.get(i);
 	}
 	
+	public String getThresholdMetricName (int thresholdIndex) {
+		SchemaColumn sc = arrayListColumns.get(thresholdIndex);
+		
+		if ((sc.getType() == SchemaColumn.TYPE.METRIC)  && (sc.getThreshold() > -1 )) {
+			return sc.getName();
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public double getThresholdValue (int idx) {
+		return arrayListColumns.get(idx).getThreshold();
+	}
+	
+	public int []  getDimsToIgnore() {
+		if (dimsToIgnore == null) {
+			dimsToIgnore = new int[omittedDimCount];
+			int j = 0;
+			for (int i = 0; i < this.arrayListColumns.size(); i++) {
+				if (arrayListColumns.get(i).isColumnTracked() == false) {
+					dimsToIgnore[j] = i;
+					j++;
+				}
+			}
+		}
+		return dimsToIgnore;
+	}
+	public HashSet<Integer>  getDimsToIgnoreHashSet() {
+		
+		if (dimsToIgnoreHashSet == null) {
+			dimsToIgnoreHashSet = new HashSet<Integer>();
+			for (int i = 0; i < this.arrayListColumns.size(); i++) {
+				if (arrayListColumns.get(i).isColumnTracked() == false) {
+					dimsToIgnoreHashSet.add(new Integer(i));
+				}
+			}
+		}
+		return dimsToIgnoreHashSet;
+	}
+	
+	
+	public HashSet<String> getValsToIgnore() {
+		return FPGConfig.IGNORE_VALUES;
+	}
+
+	public HashSet<String> getDimValsToIgnore() {
+		return FPGConfig.IGNORE_DIMVALS;
+	}
+	
+	public String toString(String separator) {
+		StringBuilder sb___ = new StringBuilder();
+		
+		for (int i = 0; i < arrayListColumns.size(); i++) {
+			sb___.append(arrayListColumns.get(i).getName());
+			if (i < (arrayListColumns.size() - 1)) {
+				sb___.append(separator);
+			}
+		}
+		return sb___.toString();
+	}
+	public String []  getSchemaInArray() {
+		String [] retVal = new String[arrayListColumns.size()];
+		for (int i = 0; i < arrayListColumns.size(); i++) {
+			retVal[i] = arrayListColumns.get(i).getName();
+		}
+		return retVal;
+	}
 	
 	
 }

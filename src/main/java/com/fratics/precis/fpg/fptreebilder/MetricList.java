@@ -10,6 +10,13 @@ public class MetricList {
 	private static HashMap<String,Double> referenceMetricList = null;
 	private static String staticNameOfMetricForSupportThreshold = null;
 	
+	public static void setStaticNameOfMetricForSupportThreshold (String _s) {
+		staticNameOfMetricForSupportThreshold = _s;
+	}
+	public static String getStaticNameOfMetricForSupportThreshold() {
+		return staticNameOfMetricForSupportThreshold;
+	}
+	
 	
 	public static MetricList makeReplica(MetricList ml) {
 		MetricList ret = makeBlankMetricList();
@@ -71,7 +78,7 @@ public class MetricList {
 
 		Set<String> keySet = ml.allMetric.keySet();
 		for (String s1 : keySet) {
-					this.allMetric.put(s1, ml.allMetric.get(s1).doubleValue() + this.allMetric.get(s1).doubleValue());
+			this.allMetric.put(s1, ml.allMetric.get(s1).doubleValue() + this.allMetric.get(s1).doubleValue());
 		}
 	}
 
@@ -81,14 +88,15 @@ public class MetricList {
 	}
 
 
-	public String getIndexOfMetricWithSupportThreshold() {
-		return nameOfMetricForSupportThreshold;
+	public String getNameOfMetricForSupportThreshold() {
+		return this.nameOfMetricForSupportThreshold;
+	}
+	
+	public void setNameOfMetricForSupportThreshold(String nameOfMetricForSupportThreshold) {
+		this.nameOfMetricForSupportThreshold = nameOfMetricForSupportThreshold;
 	}
 
-
-	public static String getStaticIndexOfMetricWithSupportThreshold() {
-		return staticNameOfMetricForSupportThreshold;
-	}
+	
 	
 	StringBuilder tmpSB = new StringBuilder();
 	public String getMetricNameHeader(String separatorBetwnMetrics) {

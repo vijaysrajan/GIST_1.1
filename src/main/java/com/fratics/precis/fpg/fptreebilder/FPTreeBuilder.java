@@ -1,6 +1,9 @@
 package com.fratics.precis.fpg.fptreebilder;
 
 import java.util.BitSet;
+import java.util.HashSet;
+
+import com.fratics.precis.fpg.config.FPGConfig;
 import com.fratics.precis.fpg.fptreeminer.MineFPTree;
 import com.fratics.precis.exception.PrecisException;
 
@@ -30,14 +33,32 @@ public class FPTreeBuilder {
 		}
 		return false;
 	}
-		
-	private boolean isDimValInIgnoreList(String [] ignoreList, String valPart) {
-		if (ignoreList.length == 0) return false;
-		for (int i = 0; i < ignoreList.length; i++) {
-			if (ignoreList[i].equalsIgnoreCase(valPart)) return true;
-		}
-		return false;
+	
+	private boolean isDimIgnored(int idx, HashSet<Integer> dimIndexesToIgnore) {
+		if (dimIndexesToIgnore == null) return false;
+		return dimIndexesToIgnore.contains(new Integer(idx));
 	}
+
+	
+	
+//	//use HashSet instead of String array
+//	private boolean isDimValInIgnoreList(String [] ignoreList, String valPart) {
+//		if (ignoreList.length == 0) return false;
+//		for (int i = 0; i < ignoreList.length; i++) {
+//			if (ignoreList[i].equalsIgnoreCase(valPart)) return true;
+//		}
+//		return false;
+//	}
+	
+	private boolean isDimValInIgnoreList( HashSet<String> dimValIgnoreList, String valPart, String dimName, String separator) {
+		if (dimValIgnoreList == null) return false;
+		StringBuilder sb__ = new StringBuilder();
+		sb__.append(dimName);
+		sb__.append(separator);
+		sb__.append(valPart);
+		return dimValIgnoreList.contains(sb__.toString());
+	}
+	
 	
 	private boolean isMetricIndex(int idx, int [] metricIndexes) {
 		if (metricIndexes.length == 0) return false;
@@ -83,8 +104,10 @@ public class FPTreeBuilder {
 							 String [] referenceSchema, 
 							 int    [] metricIndexes,
 							 int       metricIdxForSuppThrshldCmptn,
-							 String [] dimValIgnoreList,
-							 int    [] dimIndexesToIgnore,
+							 //String [] valueIgnoreList,
+							 HashSet<String> dimValsToIgnore,
+							 HashSet<String> valueIgnoreList,
+							 HashSet<Integer> dimIndexesToIgnore,
 							 String    dimToValSeparator) throws Exception{
 		
 		if ((isInitialized == false) || ht == null) {
@@ -93,7 +116,10 @@ public class FPTreeBuilder {
 		}
 		
 		String [] valParts = inputData.split(colSeparator, -1);
-		if (referenceSchema.length != valParts.length) {
+		for (int i = 0; i < valParts.length; i++) {
+			valParts[i] = valParts[i].trim();
+		}
+		if ( (referenceSchema.length != valParts.length) && (referenceSchema.length != (1 + valParts.length))) {
 			throw new PrecisException("Data and schema have a massive mismatch.");
 		}
 		
@@ -110,15 +136,17 @@ public class FPTreeBuilder {
 		b.clear();
 		//reorder record based on header table lookup
 		for (int i = 0; i < referenceSchema.length; i++) {
-			if ((!isDimValInIgnoreList(dimValIgnoreList, valParts[i])) && 
+			if ((!isDimValInIgnoreList(dimValsToIgnore, valParts[i],referenceSchema[i],referenceSchema[i])) && 
 			    (!isMetricIndex(i,metricIndexes) &&
-			    (!isDimIgnored(i,dimIndexesToIgnore)))) {
+			    (!isDimIgnored(i,dimIndexesToIgnore))) && 
+			    (!valueIgnoreList.contains(valParts[i]))) {
 				sb.setLength(0);
 				sb.append(referenceSchema[i]);
 				sb.append(dimToValSeparator);
 				sb.append(valParts[i]);
-				b.set(ht.getInt(sb.toString()));
-				
+				if (ht.hasDimVal(sb.toString())) {
+					b.set(ht.getInt(sb.toString()));
+				}
 			} else {
 				continue;
 			}
@@ -159,7 +187,8 @@ public class FPTreeBuilder {
 	          String separatorBetwnlevelAndRule,
 	          String separatorBetwnRuleAndMetric,
 	          String separatorBetwnSuccessiveFIS,
-	          int numberOfStages
+	          int numberOfStages,
+	          double supportVal
 			) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = ht.getHeaderTableSize() -1 ; i >=0 ; i--) {
@@ -169,7 +198,9 @@ public class FPTreeBuilder {
 				continue;
 			}
 			//MineFPTree mfpt = new MineFPTree(" & ",  "," ,  "," , "\n",5);
-			MineFPTree mfpt = new MineFPTree(separatorBetwnSuccessiveDimVal, separatorBetwnlevelAndRule, separatorBetwnRuleAndMetric, separatorBetwnSuccessiveFIS, numberOfStages);
+			MineFPTree mfpt = new MineFPTree(separatorBetwnSuccessiveDimVal, separatorBetwnlevelAndRule, 
+											separatorBetwnRuleAndMetric, separatorBetwnSuccessiveFIS, 
+											numberOfStages);
 			String nodeOfInterest = fptn.getDimValName();
 			while (fptn != null) {
 				sb.setLength(0);
@@ -189,7 +220,7 @@ public class FPTreeBuilder {
 				fptn = fptn.getNextPeer();
 			}
 			//here write to the output file
-			System.out.print(mfpt.toString(2));
+			System.out.print(mfpt.toString(supportVal));
 		}
 		
 	}
@@ -212,17 +243,17 @@ public class FPTreeBuilder {
 	
 	public static void main(String [] args) throws Exception {
 		
-		String [] inputDataArr = {
-									"10,t,t,t,,,1",
-									"10,t,t,t,,t,1",
-									"10,t,,t,t,,1",
-									"10,t,,t,,,1",
-									"10,t,t,t,,,1",
-									"10,t,t,,,,1",
-									"10,t,,t,,t,1",
-									"10,,t,t,t,t,1",
-									"10,,t,,t,t,1",
-									"10,t,t,,,t,1",
+		String [] inputDataArr = {    // b,a,c,e,d
+									"10,t,t,t, , ,1",
+									"10,t,t,t, ,t,1",
+									"10,t, ,t,t, ,1",
+									"10,t, ,t, , ,1",
+									"10,t,t,t, , ,1",
+									"10,t,t, , , ,1",
+									"10,t, ,t, ,t,1",
+									"10, ,t,t,t,t,1",
+									"10, ,t, ,t,t,1",
+									"10,t,t, , ,t,1",
 									
 		};
 
@@ -231,8 +262,11 @@ public class FPTreeBuilder {
 		String colSeparator = ",";
 		int [] metricIndexes = {6,0};
 		int metricIdxForSuppThrshldCmptn = 6;
-		String [] dimValIgnoreList = {"", "null", "na", "0"};
-		int [] dimIndexesToIgnore = {};
+		HashSet<String> valueIgnoreList = new HashSet<String>();
+		//{"", "null", "na", "0"};
+		//valueIgnoreList.add(""); valueIgnoreList.add("null"); valueIgnoreList.add("na"); valueIgnoreList.add("0");
+		valueIgnoreList = FPGConfig.IGNORE_VALUES;
+		HashSet<Integer> dimIndexesToIgnore = null;
 		String    dimToValSeparator = "=";
 		
 		
@@ -278,13 +312,13 @@ public class FPTreeBuilder {
 			//System.out.print(s + " ");
 			fptb.addPathToTree(s, colSeparator, schema,
 					           metricIndexes, metricIdxForSuppThrshldCmptn, 
-					           dimValIgnoreList, dimIndexesToIgnore, 
+					           FPGConfig.IGNORE_DIMVALS,valueIgnoreList, dimIndexesToIgnore, 
 					           dimToValSeparator);
 		}
 		
 		
 		System.out.println(fptb.printHeader(ml, ",", ",",  ","));
-		fptb.mineFPTree(" & ",  "," ,  "," , "\n",5);
+		fptb.mineFPTree(" & ",  "," ,  "," , "\n",5,2);
 		
 		
 		

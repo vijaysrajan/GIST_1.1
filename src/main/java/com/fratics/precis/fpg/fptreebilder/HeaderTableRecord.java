@@ -22,8 +22,8 @@ public class HeaderTableRecord implements Comparable<HeaderTableRecord> {
 	}
 	
     public int compareTo( final HeaderTableRecord o) {
-        return Double.compare(o.metrics.getAllMetric().get(o.metrics.getIndexOfMetricWithSupportThreshold()),
-        		                  this.metrics.getAllMetric().get(this.metrics.getIndexOfMetricWithSupportThreshold())  
+        return Double.compare(o.metrics.getAllMetric().get(o.metrics.getNameOfMetricForSupportThreshold()),
+        		                  this.metrics.getAllMetric().get(this.metrics.getNameOfMetricForSupportThreshold())  
         		                  );
     }
 

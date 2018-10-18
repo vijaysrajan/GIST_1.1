@@ -10,9 +10,9 @@ public class SchemaColumn {
 	private int columnNumber = -1;
 	private boolean isColumnTracked = true;
 	private DATATYPE dataType = DATATYPE.DOUBLE;
-	//if computed but threshold not applied longThreshold && doubleThreshold will be null
-	private MetricThresholds<Long> longThreshold = null;
-	private MetricThresholds<Double> doubleThreshold = null;
+	//if computed but threshold not applied longThreshold && threshold will be null
+	//private MetricThresholds<Long> longThreshold = null;
+	private MetricThresholds<Double> threshold = null;
 	
 	
 	public String getName() {
@@ -47,35 +47,35 @@ public class SchemaColumn {
 	}
 	
 	public void setThreshold(double d) {
-		doubleThreshold = new MetricThresholds<Double>(new Double(d) );
+		threshold = new MetricThresholds<Double>(new Double(d) );
 	}
 	
-	public void setThreshold(long l) {
-		longThreshold = new MetricThresholds<Long>(new Long(l) );
-	}
+//	public void setThreshold(long l) {
+//		longThreshold = new MetricThresholds<Long>(new Long(l) );
+//	}
 	
 	public boolean colIsMetricOrCountAndHasThreshold() {
-		if ( (type == TYPE.METRIC || type == TYPE.COUNT) && (doubleThreshold != null || longThreshold != null)) {
+		if ( (type == TYPE.METRIC || type == TYPE.COUNT) && (threshold != null )) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
-	public double getDoubleThreshold() {
-		if (doubleThreshold != null) {
-			return doubleThreshold.getThreshold();
+	public double getThreshold() {
+		if (threshold != null) {
+			return threshold.getThreshold();
 		} else {
 			return -1;
 		}
 	}
 	
-	public long getLongThreshold() {
-		if (longThreshold != null) {
-			return longThreshold.getThreshold();
-		} else {
-			return -1;
-		}
-	}
+//	public long getLongThreshold() {
+//		if (longThreshold != null) {
+//			return longThreshold.getThreshold();
+//		} else {
+//			return -1;
+//		}
+//	}
 	
 }

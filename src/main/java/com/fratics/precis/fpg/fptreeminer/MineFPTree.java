@@ -75,7 +75,7 @@ public class MineFPTree {
 			}
 			return;
 		} else  {
-			for (int i = 0; i <= this.numberOfStages && i <= this.prefixParts.length; i++) {
+			for (int i = 0; i <= this.numberOfStages -1 && i <= this.prefixParts.length; i++) {
 				createFIS(0,this.prefixParts.length - i + 1,new ArrayList<String>(),0,i);
 			}
 		}
