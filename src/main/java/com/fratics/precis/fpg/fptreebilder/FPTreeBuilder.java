@@ -4,8 +4,10 @@ import java.util.BitSet;
 import java.util.HashSet;
 
 import com.fratics.precis.fpg.config.FPGConfig;
+import com.fratics.precis.fpg.config.Util;
 import com.fratics.precis.fpg.fptreeminer.MineFPTree;
 import com.fratics.precis.exception.PrecisException;
+import java.io.RandomAccessFile;
 
 public class FPTreeBuilder {
 	private static HeaderTable 		ht         = null;
@@ -188,8 +190,9 @@ public class FPTreeBuilder {
 	          String separatorBetwnRuleAndMetric,
 	          String separatorBetwnSuccessiveFIS,
 	          int numberOfStages,
-	          double supportVal
-			) {
+	          double supportVal,
+	          RandomAccessFile raf
+			) throws Exception {
 		StringBuilder sb = new StringBuilder();
 		for (int i = ht.getHeaderTableSize() -1 ; i >=0 ; i--) {
 			HeaderTableRecord htr = ht.get(i);
@@ -220,7 +223,11 @@ public class FPTreeBuilder {
 				fptn = fptn.getNextPeer();
 			}
 			//here write to the output file
-			System.out.print(mfpt.toString(supportVal));
+			if (raf == null) {
+				System.out.print(mfpt.toString(supportVal));
+			} else {
+				Util.writeCandidatesToOutputFile(mfpt.toString(supportVal), raf);
+			}
 		}
 		
 	}
@@ -318,7 +325,7 @@ public class FPTreeBuilder {
 		
 		
 		System.out.println(fptb.printHeader(ml, ",", ",",  ","));
-		fptb.mineFPTree(" & ",  "," ,  "," , "\n",5,2);
+		fptb.mineFPTree(" & ",  "," ,  "," , "\n",5,2,null);
 		
 		
 		

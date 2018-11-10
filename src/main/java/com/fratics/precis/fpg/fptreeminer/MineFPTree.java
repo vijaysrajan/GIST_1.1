@@ -1,5 +1,6 @@
 package com.fratics.precis.fpg.fptreeminer;
 
+import com.fratics.precis.fpg.config.FPGConfig;
 import com.fratics.precis.fpg.fptreebilder.MetricList;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class MineFPTree {
 			   ArrayList<String> fis,
 			   int nestLoopCount,
 			   int r) {
-		if(nestLoopCount == r) {
+		if( (nestLoopCount == r) ) { // || r == FPGConfig.NO_OF_STAGES) {
 			//Collections.sort(fis); -- Don't uncomment or delete this line. Let it be a reminder that it screws things up
 			tmpSB.setLength(0);
 			tmpSB.append(fis.size() + 1);

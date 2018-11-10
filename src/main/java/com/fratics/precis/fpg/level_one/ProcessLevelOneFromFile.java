@@ -32,7 +32,7 @@ public class ProcessLevelOneFromFile {
     private int [] thresholdIndexes = null;
     private HashMap<String,MetricList> levelOneHashMap = new HashMap<String,MetricList>(); 
     private ArrayList<HashMap<String,Double>> arrayListOfHashMapColumnsForDblThresh   = null;
-    //	private ArrayList<HashMap<String,Long>> arrayListOfHashMapColumnsForLongThresh    = null;
+    //private ArrayList<HashMap<String,Long>> arrayListOfHashMapColumnsForLongThresh    = null;
     
     
     
@@ -161,7 +161,7 @@ public class ProcessLevelOneFromFile {
     }
     
     
-    public void dumpLevelOneValuesIgnoreThreshold() {
+    private void dumpLevelOneValuesIgnoreThreshold() {
 	    	for (Entry<String, MetricList> entry : levelOneHashMap.entrySet()) {
 	    	    String key = entry.getKey();
 	    	    MetricList value = entry.getValue();
@@ -170,27 +170,22 @@ public class ProcessLevelOneFromFile {
     }
     
     public void applyThresholdsForEachCase () throws Exception{
+    	RandomAccessFile raf = Util.openFile(FPGConfig.OUPUT_FILE);
     		//for (int i = 0; i < this.thresholdIndexes.length; i++) {
     			int i = 0;
 	    		ArrayList<LevelOneDimValMetrics> al = new ArrayList<LevelOneDimValMetrics>();
 	    		int thresholdIndex = this.thresholdIndexes[i];
-	    		//System.out.println(FPGConfig.schemaInstance.getThresholdMetricName(thresholdIndex) + " ---");
 		    	for (Entry<String, MetricList> entry : levelOneHashMap.entrySet()) {
 		    	    String key = entry.getKey();
 		    	    MetricList value = entry.getValue();
 		    	    value.setNameOfMetricForSupportThreshold(FPGConfig.schemaInstance.getThresholdMetricName(thresholdIndex));
 		    	    if (value.getSupportMetricValue() >= FPGConfig.schemaInstance.getThresholdValue(thresholdIndex) && 
 		    	    		FPGConfig.schemaInstance.getThresholdValue(thresholdIndex) >  -1) {
-		    	    		//System.out.println(key + "," + value.toString());
 		    	    		al.add(new LevelOneDimValMetrics(key,value,value.getNameOfMetricForSupportThreshold(),FPGConfig.SEPARATOR_BETWEEN_DIM_AND_VAL) );
 		    	    }
 		    	}
 		    	Collections.sort(al);
 		    	Collections.reverse(al);
-		    	//System.out.println("\n\n\n");
-		    	//System.out.println(FPGConfig.schemaInstance.getThresholdMetricName(thresholdIndex));
-		    	//System.out.println("---------------------------------");
-		    	//printSortedArrayListOfLevelOne(al);
 
 		    	HeaderTable ht = new HeaderTable();
 		    	for (LevelOneDimValMetrics l : al) {
@@ -215,10 +210,6 @@ public class ProcessLevelOneFromFile {
 	    	                continue;
 	    	            }
 	    	            if (thisLine != null) {
-						//	    	            		for (String sp :  FPGConfig.schemaInstance.getSchemaInArray()) {
-						//	    	            			System.out.print( sp + " " );
-						//	    	            		}
-						//	    	            		System.out.println( );
 	    	    				fptb.addPathToTree(thisLine, 
 	    	    						           FPGConfig.INPUT_RECORD_SEPERATOR,
 	    	    						           FPGConfig.schemaInstance.getSchemaInArray(),
@@ -240,23 +231,18 @@ public class ProcessLevelOneFromFile {
 		            throw new PrecisException(ex.getMessage());
 		    }
 	
+	    		this.closeFile();
+	    		System.out.println( "Time after parsing file for second time : " + (System.currentTimeMillis() - t));
 			fptb.mineFPTree(FPGConfig.SEPERATOR_BETWEEN_SUCCESSIVE_DIMVALS,
 					        FPGConfig.SEPERATOR_BETWEEN_STAGENUMBER_AND_FIS,
 					        FPGConfig.SEPARATOR_BETWEEN_FIS_AND_METRIC,
 					        "\n",
 					        FPGConfig.NO_OF_STAGES,
-					        FPGConfig.schemaInstance.getThresholdValue(thresholdIndex));
-				
-			this.closeFile();
-		    	
-//		    	System.out.println("\n\n\n");
-//		    	System.out.println(FPGConfig.schemaInstance.getThresholdMetricName(thresholdIndex));
-//		    	System.out.println("---------------------------------");
-//		    	printSortedArrayListOfLevelOne(al);
-		    	
-		    	
-    	//	}
-    	
+					        FPGConfig.schemaInstance.getThresholdValue(thresholdIndex),
+					        raf);
+    			System.out.println( "Time for recursive FPTree mining : " + (System.currentTimeMillis() - t));
+    	//	}    	
+		Util.closeFile(raf);
     }
     
     private void printSortedArrayListOfLevelOne(ArrayList<LevelOneDimValMetrics> a) {
@@ -265,17 +251,20 @@ public class ProcessLevelOneFromFile {
     		}
     }
     
-
+    static long t = 0;
     public static void main(String [] args) throws Exception{
+    			t = System.currentTimeMillis();
 	    		FPGConfig.init();
+	    		System.out.println( "Time for init : " + (System.currentTimeMillis() - t));
 	    		ProcessLevelOneFromFile p = new ProcessLevelOneFromFile();
+	    		System.out.println("Time for processing until level one : " + (System.currentTimeMillis() - t));
 	    		p.init();
 	    		p.processFile();
 	    		p.close();
+	    		//System.out.println("Time for building tree and parsing file for second time" + (System.currentTimeMillis() - t));
 	    		//p.dumpLevelOneValuesIgnoreThreshold();
 	    		p.applyThresholdsForEachCase();
-	    		
-	    		
+	    		System.out.println("Time for FPTreeMining and applying threshold : " + (System.currentTimeMillis() - t));
     }
     
 }

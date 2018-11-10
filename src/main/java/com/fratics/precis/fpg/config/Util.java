@@ -1,7 +1,7 @@
 package com.fratics.precis.fpg.config;
 
 import java.io.RandomAccessFile;
-//import java.io.File;
+import java.io.File;
 
 
 public class Util {
@@ -17,6 +17,11 @@ public class Util {
     public static RandomAccessFile openFile (String s) throws Exception {
 		StringBuilder fullpathFileName = new StringBuilder();
 		fullpathFileName.append(s);//FPGConfig.OUPUT_FILE);
+		File f = new File (fullpathFileName.toString());
+		if (f.exists()) {
+			File f2 = new File(fullpathFileName.toString() + "_" + (new Long(System.currentTimeMillis())).toString());
+			f.renameTo(f2);
+		}
         RandomAccessFile pw = new RandomAccessFile(fullpathFileName.toString(), "rw");
         return pw;
     }
