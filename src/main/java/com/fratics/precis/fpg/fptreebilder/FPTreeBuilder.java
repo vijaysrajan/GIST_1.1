@@ -206,20 +206,7 @@ public class FPTreeBuilder {
 											numberOfStages);
 			String nodeOfInterest = fptn.getDimValName();
 			while (fptn != null) {
-				sb.setLength(0);
-				FPTreeNode fptn2 = fptn.getParentNode();
-				FPTreeNode fptn3 = fptn;
-				while (fptn2.isNullNode() != true) {
-						sb.append(fptn2.getDimValName());
-						if (fptn2.getParentNode().isNullNode() != true) {
-							sb.append(separatorBetwnSuccessiveDimVal);
-						}
-					fptn3 = fptn3.getParentNode();
-					fptn2 = fptn2.getParentNode();
-				}
-				
-				mfpt.mineFISFromFPTree(nodeOfInterest, sb.toString(), fptn.getMetrics());
-				
+				mfpt.mineFISFromFPTree(nodeOfInterest, fptn.getLineageStr() , fptn.getMetrics());
 				fptn = fptn.getNextPeer();
 			}
 			//here write to the output file

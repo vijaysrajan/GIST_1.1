@@ -2,6 +2,8 @@ package com.fratics.precis.fpg.fptreebilder;
 
 import java.util.HashMap;
 
+import com.fratics.precis.fpg.config.FPGConfig;
+
 
 public class FPTreeNode {
 	private boolean	 				nullNode   = false;
@@ -11,9 +13,13 @@ public class FPTreeNode {
 	private FPTreeNode 				nextPeer	   = null;
 	private MetricList 				metrics    = null;
 	private long 					lineageCount = -1;
+	private String					lineageStr = null;
 	private int 						level  = 0;
 	private static int				maxLevel = 0;						
 	
+	public String getLineageStr() {
+		return lineageStr;
+	}
 	
 	public String getDimValName() {
 		return dimValName;
@@ -48,6 +54,20 @@ public class FPTreeNode {
 			tmp.lineageCount++;
 			tmp = tmp.parentNode;
 		}
+		
+//		
+		if (this.parentNode == null)  {
+			//n.lineageStr = n.dimValName;
+			n.lineageStr = "";
+		} else if (this.parentNode.isNullNode()) {
+			n.lineageStr = this.dimValName;
+		} else {
+			StringBuilder sbx = new StringBuilder();
+			sbx.append(this.dimValName);
+			sbx.append(FPGConfig.SEPERATOR_BETWEEN_SUCCESSIVE_DIMVALS);
+			sbx.append(this.lineageStr);
+			n.lineageStr = sbx.toString();
+		}		
 		
 	}
 	

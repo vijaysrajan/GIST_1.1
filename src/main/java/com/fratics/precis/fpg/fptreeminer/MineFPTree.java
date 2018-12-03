@@ -3,6 +3,7 @@ package com.fratics.precis.fpg.fptreeminer;
 import com.fratics.precis.fpg.config.FPGConfig;
 import com.fratics.precis.fpg.fptreebilder.MetricList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.ArrayList;
 //import java.util.Collections;
 import java.util.Map;
@@ -18,6 +19,7 @@ public class MineFPTree {
 	private String separatorBetwnSuccessiveFIS = null;
 	//private int metricIndexForSupport = -1;
 	private int numberOfStages = 0;
+	private ArrayList<String> stagingBufferForCombExplosion = null; 
 	private String [] prefixParts = null;
 	private MetricList ml = null;
 	private String headerTableEntryDimValName = null;
@@ -36,6 +38,7 @@ public class MineFPTree {
 		this.separatorBetwnSuccessiveFIS = separatorBetwnSuccessiveFIS;
 		this.separatorBetwnRuleAndMetric = separatorBetwnRuleAndMetric;
 		this.numberOfStages = numberOfStages;
+		this.stagingBufferForCombExplosion = new ArrayList<String>();
 	}
 	
 	public String getSeparatorBetwnSuccessiveDimVal() {
@@ -60,6 +63,10 @@ public class MineFPTree {
 			                      ) {
 		//System.out.println(headerTableEntryDimValName + "--" + prefix );
 		//ArrayList<String> arrayL = new ArrayList();
+		//TBD Tree is not at all optimised.
+		//System.out.println(prefix);
+		
+		
 		this.prefixParts = prefix.split(this.separatorBetwnSuccessiveDimVal,-1);
 		this.ml = ml;
 		this.headerTableEntryDimValName = headerTableEntryDimValName;
@@ -76,11 +83,50 @@ public class MineFPTree {
 			}
 			return;
 		} else  {
-			for (int i = 0; i <= this.numberOfStages -1 && i <= this.prefixParts.length; i++) {
-				createFIS(0,this.prefixParts.length - i + 1,new ArrayList<String>(),0,i);
-			}
+			createFIS2(0,this.prefixParts.length);
+			//retaining the below for legacy purposes
+			//			for (int i = 0; i <= this.numberOfStages -1 && i <= this.prefixParts.length; i++) {
+			//				createFIS(0,this.prefixParts.length - i + 1,new ArrayList<String>(),0,i);
+			//			}
 		}
 	}	
+	
+	
+	
+	private void putInFIS() {
+
+		tmpSB.setLength(0);
+		tmpSB.append(stagingBufferForCombExplosion.size() + 1);
+		tmpSB.append(separatorBetwnlevelAndRule);
+		tmpSB.append(this.headerTableEntryDimValName);
+		if (stagingBufferForCombExplosion.size() > 0 ) tmpSB.append(this.separatorBetwnSuccessiveDimVal);
+		for (int j = 0; j < stagingBufferForCombExplosion.size(); j++) {
+			tmpSB.append(stagingBufferForCombExplosion.get(j));
+				if (j < stagingBufferForCombExplosion.size() - 1) {
+					tmpSB.append(this.separatorBetwnSuccessiveDimVal);
+				}
+		}
+		if(FIS.containsKey(tmpSB.toString())) {
+			MetricList ml2 = FIS.get(tmpSB.toString());
+			ml2.updateMetricList(ml);
+		} else {
+			FIS.put(tmpSB.toString(), MetricList.makeReplica(ml));
+		}
+		return;
+		
+	}
+	
+	private void createFIS2(int from, int to) {
+		putInFIS();
+		for (int i = from; i < to; i++) {
+			stagingBufferForCombExplosion.add(this.prefixParts[i]);
+			if (stagingBufferForCombExplosion.size() < this.numberOfStages) {
+				createFIS2(i+1,to);
+			}
+			stagingBufferForCombExplosion.remove(stagingBufferForCombExplosion.size() -1);
+		}
+	}
+	
 	
 	private void createFIS(int from,
 			   int to,
@@ -116,6 +162,10 @@ public class MineFPTree {
 			fis.remove(fis.size() - 1);
 		}
 	}
+	
+	
+	
+	
 	
 	private static StringBuilder sbReOrder = new StringBuilder();
 	public static String reOrderLexicographically ( String str, String separator1st,  String separator2nd) {
