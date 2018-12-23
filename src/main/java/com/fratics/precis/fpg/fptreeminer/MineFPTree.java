@@ -61,7 +61,7 @@ public class MineFPTree {
 			                      String prefix, 
 			                      MetricList ml			                      
 			                      ) {
-		//System.out.println(headerTableEntryDimValName + "--" + prefix );
+		System.out.println(prefix + "--" + headerTableEntryDimValName  );
 		//ArrayList<String> arrayL = new ArrayList();
 		//TBD Tree is not at all optimised.
 		//System.out.println(prefix);
@@ -199,24 +199,85 @@ public class MineFPTree {
 			}
 		}
 		return sb.toString();
-} 	
+	} 	
+	
+	
+	ArrayList<String> arr = new ArrayList<String>();
+	private void createFIS_TestParts(int from, int to, boolean print) {
+		if (print == true)
+			System.out.println(Arrays.toString(stagingBufferForCombExplosion.toArray()));
+		arr.add(Arrays.toString(stagingBufferForCombExplosion.toArray()));
+		for (int i = from; i < to; i++) {
+			stagingBufferForCombExplosion.add(this.prefixParts[i]);
+			//if (stagingBufferForCombExplosion.size() < this.numberOfStages) {
+			createFIS_TestParts(i+1,to,print);
+			//}
+			stagingBufferForCombExplosion.remove(stagingBufferForCombExplosion.size() -1);
+		}
+	}
+	
+	
+	
 	
 	public static void main(String [] args) {
+//		MineFPTree mfpt = new MineFPTree(" & ", "," , ";","\n", 5);
+//		MetricList ml = new MetricList();
+//		ml.addMetricToList("imp", 45, true);
+//		mfpt.mineFISFromFPTree("f=t", "a=t & b=t & c=t & d=t & e=t",ml);
+//		MetricList ml2 = new MetricList();
+//		ml2.addMetricToList("imp", 12, true);
+//		mfpt.mineFISFromFPTree("f=t", "a=t",ml2);
+//		MetricList ml4 = new MetricList();
+//		ml4.addMetricToList("imp", 2, true);
+//		mfpt.mineFISFromFPTree("f=t", "e=t",ml4);
+//		MetricList ml3 = new MetricList();
+//		ml3.addMetricToList("imp", 1, true);
+//		mfpt.mineFISFromFPTree("f=t", "",ml3);
+//		
+//		System.out.println(mfpt.toString(2));
 		MineFPTree mfpt = new MineFPTree(" & ", "," , ";","\n", 5);
-		MetricList ml = new MetricList();
-		ml.addMetricToList("imp", 45, true);
-		mfpt.mineFISFromFPTree("f=t", "a=t & b=t & c=t & d=t & e=t",ml);
-		MetricList ml2 = new MetricList();
-		ml2.addMetricToList("imp", 12, true);
-		mfpt.mineFISFromFPTree("f=t", "a=t",ml2);
-		MetricList ml4 = new MetricList();
-		ml4.addMetricToList("imp", 2, true);
-		mfpt.mineFISFromFPTree("f=t", "e=t",ml4);
-		MetricList ml3 = new MetricList();
-		ml3.addMetricToList("imp", 1, true);
-		mfpt.mineFISFromFPTree("f=t", "",ml3);
+		mfpt.prefixParts = new String[10];
+		mfpt.prefixParts[0] = "a";
+		mfpt.prefixParts[1] = "b";
+		mfpt.prefixParts[2] = "c";
+		mfpt.prefixParts[3] = "d";
+		mfpt.prefixParts[4] = "e";
+		mfpt.prefixParts[5] = "f";
+		mfpt.prefixParts[6] = "g";
+		mfpt.prefixParts[7] = "h";
+		mfpt.prefixParts[8] = "i";
+		mfpt.prefixParts[9] = "j";
+		long t0 = System.currentTimeMillis();
 		
-		System.out.println(mfpt.toString(2));
+		//here we compute the time taken to compute all the 2^10 powersets 
+		mfpt.createFIS_TestParts(0, 10,true);
+		System.out.println(System.currentTimeMillis() - t0);
+		
+		//cleanup
+		while (mfpt.arr.size() > 0) {
+			mfpt.arr.remove(0);
+		}
+		
+		//here we pre-compute the 2^5 combinations
+		mfpt.createFIS_TestParts(0, 6,false);
+		ArrayList<String> arr2 = new ArrayList<String>();
+		//we store the results in a temp array while simultaneously cleaning up the staging array which is the holding area
+		while (mfpt.arr.size() > 0) {
+			arr2.add(mfpt.arr.remove(0));
+		}
+		t0 = System.currentTimeMillis();
+		
+		//now we compute the remaining 2^5 remaining powerset of f through j
+		mfpt.createFIS_TestParts(6, 10,false);
+
+		for (int i = 0; i < mfpt.arr.size();i++) {
+			for (int j = 0; j < arr2.size(); j++) {
+				System.out.println( arr2.get(j) +  mfpt.arr.get(i)) ;
+				
+			}
+		}
+		System.out.println(System.currentTimeMillis() - t0);
+
 	}
 	
 	

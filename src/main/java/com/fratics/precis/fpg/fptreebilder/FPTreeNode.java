@@ -15,7 +15,7 @@ public class FPTreeNode {
 	private long 					lineageCount = -1;
 	private String					lineageStr = null;
 	private int 						level  = 0;
-	private static int				maxLevel = 0;						
+	private static int				maxLevel = 0;			
 	
 	public String getLineageStr() {
 		return lineageStr;

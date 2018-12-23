@@ -193,7 +193,7 @@ public class FPTreeBuilder {
 	          double supportVal,
 	          RandomAccessFile raf
 			) throws Exception {
-		StringBuilder sb = new StringBuilder();
+		//StringBuilder sb = new StringBuilder();
 		for (int i = ht.getHeaderTableSize() -1 ; i >=0 ; i--) {
 			HeaderTableRecord htr = ht.get(i);
 			FPTreeNode fptn = htr.getFirstNode();
@@ -205,6 +205,13 @@ public class FPTreeBuilder {
 											separatorBetwnRuleAndMetric, separatorBetwnSuccessiveFIS, 
 											numberOfStages);
 			String nodeOfInterest = fptn.getDimValName();
+			
+			//Use PreTrav and visit each node until given level 'p' and for all trees 
+			//with more than 1 child, pre-compute the string wise enumerations.
+			
+			
+			
+			
 			while (fptn != null) {
 				mfpt.mineFISFromFPTree(nodeOfInterest, fptn.getLineageStr() , fptn.getMetrics());
 				fptn = fptn.getNextPeer();
