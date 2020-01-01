@@ -64,7 +64,7 @@ public class ProcessLevelOneFromFile {
 		//		if (FPGConfig.schemaInstance.doesSchemaHaveALongMetricWithThreshold()) {
 		//			//arrayListOfHashMapColumnsForLongThresh   = new ArrayList<HashMap<String,Long>> ();
 		//		}
-		raf = Util.openFile(FPGConfig.BAD_FATA_FILE);
+		raf = Util.openFile(FPGConfig.BAD_DATA_FILE);
 		this.thresholdIndexes = FPGConfig.schemaInstance.getThresholdIndexes() ;
 		this.metricIndexes    = FPGConfig.schemaInstance.getMetricsIndexes();
 		arrayListOfHashMapColumnsForDblThresh   = new ArrayList<HashMap<String,Double>> ();

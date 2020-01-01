@@ -8,7 +8,7 @@ import com.fratics.precis.exception.PrecisException;
 public class FPGConfig {
 	
     public static String INPUT_DATA_FILE = "./data/dataFile";
-    public static String BAD_FATA_FILE="./data/badDataFile";
+    public static String BAD_DATA_FILE="./data/badDataFile";
     public static String OUPUT_FILE="./data/fis_output.csv";
     public static String INPUT_RECORD_SEPERATOR = Character.toString('\001');	
     public static String SEPERATOR_BETWEEN_SUCCESSIVE_DIMVALS="  ~and~  ";
@@ -172,9 +172,9 @@ public class FPGConfig {
         		INPUT_DATA_FILE = tmp;
         }
         
-        tmp = c.getProperties().getProperty("BAD_FATA_FILE");
+        tmp = c.getProperties().getProperty("BAD_DATA_FILE");
         if (!(tmp == null || tmp.equalsIgnoreCase(""))) {
-        		BAD_FATA_FILE = tmp;
+        		BAD_DATA_FILE = tmp;
         }
             
         tmp = c.getProperties().getProperty("OUPUT_FILE");

@@ -45,7 +45,6 @@ public class HeaderTable {
 			System.out.println(e.getMessage());
 			return -1;
 		}
-		
 	}
 	
 	public boolean hasDimVal(String s) {

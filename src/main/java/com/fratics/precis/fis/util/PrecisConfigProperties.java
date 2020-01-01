@@ -14,7 +14,7 @@ public class PrecisConfigProperties {
     public static String OUTPUT_RECORD_SEPERATOR_DIMENSION = Character.toString('\001');
     public static String OUTPUT_RECORD_SEPERATOR_METRIC = Character.toString('\003');
     public static String OUTPUT_RECORD_SEPERATOR_STAGENUMBER = Character.toString('\004');
-    //public static String INPUT_SCHEMA_FILE = "./data/schemaFile";
+    public static String INPUT_SCHEMA_FILE = "./data/schemaFile";
     public static String SCHEMA = "";
     public static int NO_OF_STAGES = 8;
     public static long   GIST_MAX_NUMBER_OF_INSIGHTS=1000000;
@@ -111,7 +111,7 @@ public class PrecisConfigProperties {
                 OUTPUT_RECORD_SEPERATOR_STAGENUMBER = s;
         }
 
-        tmp = c.getProperties().getProperty("SCHEMA");
+        tmp = c.getProperties().getProperty("INPUT_SCHEMA_FILE");
         if ((tmp == null || tmp.equalsIgnoreCase(""))) {
     	  		throw new PrecisException("No Schema found.");
         } else {

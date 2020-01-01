@@ -1,10 +1,12 @@
 package com.fratics.precis.fpg.fptreebilder;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashSet;
 
 import com.fratics.precis.fpg.config.FPGConfig;
 import com.fratics.precis.fpg.config.Util;
+import com.fratics.precis.fpg.fptreeminer.FrequentPathToHeaderNode;
 import com.fratics.precis.fpg.fptreeminer.MineFPTree;
 import com.fratics.precis.exception.PrecisException;
 import java.io.RandomAccessFile;
@@ -13,6 +15,7 @@ public class FPTreeBuilder {
 	private static HeaderTable 		ht         = null;
 	private boolean isInitialized = false;
 	private FPTreeNode rootNode = null;
+	private ArrayList<FrequentPathToHeaderNode> arrListFreqPath = new ArrayList<FrequentPathToHeaderNode> ();
 
 	public void initialize(HeaderTable tbl) throws Exception{
 		this.setHeaderTable (tbl);		
@@ -179,10 +182,10 @@ public class FPTreeBuilder {
 		//System.out.println();
 	}
 	
-	//private static Queue<FPTreeNode> q = new Queue<FPTreeNode>();
-	public static void testBFS(FPTreeNode n) {
-		
+	public HeaderTable getHt() {
+		return FPTreeBuilder.ht;
 	}
+	
 	
 	public void mineFPTree(
   			  String separatorBetwnSuccessiveDimVal, 
@@ -210,12 +213,16 @@ public class FPTreeBuilder {
 			//with more than 1 child, pre-compute the string wise enumerations.
 			
 			
-			
-			
+			arrListFreqPath.clear();
 			while (fptn != null) {
 				mfpt.mineFISFromFPTree(nodeOfInterest, fptn.getLineageStr() , fptn.getMetrics());
+				//arrListFreqPath.add(new FrequentPathToHeaderNode(fptn.getLineageStr() , fptn.getMetrics(), separatorBetwnSuccessiveDimVal, FPTreeBuilder.ht));
 				fptn = fptn.getNextPeer();
 			}
+			//mfpt.mineFISFromFPTree2(arrListFreqPath, nodeOfInterest, supportVal, this.getHt());
+
+			
+			
 			//here write to the output file
 			if (raf == null) {
 				System.out.print(mfpt.toString(supportVal));

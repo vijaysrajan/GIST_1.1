@@ -1,6 +1,7 @@
 package com.fratics.precis.fpg.fptreeminer;
 
 import com.fratics.precis.fpg.config.FPGConfig;
+import com.fratics.precis.fpg.fptreebilder.HeaderTable;
 import com.fratics.precis.fpg.fptreebilder.MetricList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 //import java.util.Collections;
 import java.util.Map;
 import java.util.Arrays;
+import java.util.BitSet;
 
 public class MineFPTree {
 	
@@ -19,11 +21,15 @@ public class MineFPTree {
 	private String separatorBetwnSuccessiveFIS = null;
 	//private int metricIndexForSupport = -1;
 	private int numberOfStages = 0;
-	private ArrayList<String> stagingBufferForCombExplosion = null; 
+	private ArrayList<String> stagingBufferForCombExplosion = null;
+	private String pathPrefix = null;;
 	private String [] prefixParts = null;
+	
 	private MetricList ml = null;
 	private String headerTableEntryDimValName = null;
 	private StringBuilder tmpSB = new StringBuilder();
+	
+	//private ArrayList<FrequentPathToHeaderNode> arrListFreqPath = new ArrayList<FrequentPathToHeaderNode>();
 	
 	
 	public MineFPTree(String separatorBetwnSuccessiveDimVal, 
@@ -57,16 +63,17 @@ public class MineFPTree {
 		return separatorBetwnSuccessiveFIS;
 	}
 	
+		
 	public void mineFISFromFPTree(String headerTableEntryDimValName, 
 			                      String prefix, 
 			                      MetricList ml			                      
 			                      ) {
-		System.out.println(prefix + "--" + headerTableEntryDimValName  );
+		//System.out.println(headerTableEntryDimValName + " : " + prefix);
 		//ArrayList<String> arrayL = new ArrayList();
 		//TBD Tree is not at all optimised.
 		//System.out.println(prefix);
 		
-		
+		this.pathPrefix = prefix;
 		this.prefixParts = prefix.split(this.separatorBetwnSuccessiveDimVal,-1);
 		this.ml = ml;
 		this.headerTableEntryDimValName = headerTableEntryDimValName;
@@ -83,11 +90,7 @@ public class MineFPTree {
 			}
 			return;
 		} else  {
-			createFIS2(0,this.prefixParts.length);
-			//retaining the below for legacy purposes
-			//			for (int i = 0; i <= this.numberOfStages -1 && i <= this.prefixParts.length; i++) {
-			//				createFIS(0,this.prefixParts.length - i + 1,new ArrayList<String>(),0,i);
-			//			}
+			createFIS4(0,this.prefixParts.length);
 		}
 	}	
 	
@@ -95,7 +98,8 @@ public class MineFPTree {
 	
 	private void putInFIS() {
 
-		tmpSB.setLength(0);
+		//tmpSB.setLength(0);
+		tmpSB.delete(0, tmpSB.length());
 		tmpSB.append(stagingBufferForCombExplosion.size() + 1);
 		tmpSB.append(separatorBetwnlevelAndRule);
 		tmpSB.append(this.headerTableEntryDimValName);
@@ -116,6 +120,36 @@ public class MineFPTree {
 		
 	}
 	
+	
+	//This is a better implementation that the other three implementations because as tested independently, 
+	//unnecessary work is avoided in looping and just adding then removing the prefixParts. 
+	private void createFIS4(int from, int to) {
+		putInFIS();
+		if (stagingBufferForCombExplosion.size() == this.numberOfStages) {
+			return;
+		}
+		
+		for (int i = from; i < to && (stagingBufferForCombExplosion.size() < this.numberOfStages); i++) {
+			stagingBufferForCombExplosion.add(this.prefixParts[i]);
+			createFIS4(i+1,to);
+			stagingBufferForCombExplosion.remove(stagingBufferForCombExplosion.size() -1);
+		}
+	}
+	
+	private void createFIS3(int from, int to) {
+		 
+		putInFIS();
+		for (int i = from; i < to; i++) {
+			stagingBufferForCombExplosion.add(this.prefixParts[i]);
+			if (stagingBufferForCombExplosion.size() < this.numberOfStages) {
+				createFIS3(i+1,to);
+			}
+			stagingBufferForCombExplosion.remove(stagingBufferForCombExplosion.size() -1);
+		}
+	}
+	
+	
+	
 	private void createFIS2(int from, int to) {
 		putInFIS();
 		for (int i = from; i < to; i++) {
@@ -126,45 +160,6 @@ public class MineFPTree {
 			stagingBufferForCombExplosion.remove(stagingBufferForCombExplosion.size() -1);
 		}
 	}
-	
-	
-	private void createFIS(int from,
-			   int to,
-			   ArrayList<String> fis,
-			   int nestLoopCount,
-			   int r) {
-		if( (nestLoopCount == r) ) { // || r == FPGConfig.NO_OF_STAGES) {
-			//Collections.sort(fis); -- Don't uncomment or delete this line. Let it be a reminder that it screws things up
-			tmpSB.setLength(0);
-			tmpSB.append(fis.size() + 1);
-			tmpSB.append(separatorBetwnlevelAndRule);
-			tmpSB.append(this.headerTableEntryDimValName);
-			if (fis.size() > 0 ) tmpSB.append(this.separatorBetwnSuccessiveDimVal);
-			for (int j = 0; j < fis.size(); j++) {
-				if (!fis.get(j).equals("")) {
-					tmpSB.append(fis.get(j));
-					if (j < fis.size() - 1) {
-						tmpSB.append(this.separatorBetwnSuccessiveDimVal);
-					}
-				}
-			}
-			if(FIS.containsKey(tmpSB.toString())) {
-				MetricList ml2 = FIS.get(tmpSB.toString());
-				ml2.updateMetricList(ml);
-			} else {
-				FIS.put(tmpSB.toString(), MetricList.makeReplica(ml));
-			}
-			return;
-		}
-		for (int i = from; i < to; i++) {
-			fis.add(prefixParts[i]);
-			createFIS(i+1,to+1,fis,nestLoopCount + 1,r);
-			fis.remove(fis.size() - 1);
-		}
-	}
-	
-	
-	
 	
 	
 	private static StringBuilder sbReOrder = new StringBuilder();
@@ -279,6 +274,167 @@ public class MineFPTree {
 		System.out.println(System.currentTimeMillis() - t0);
 
 	}
+
+	
+//	// Returns length of LCS for X[0..m-1], Y[0..n-1] 
+//  static ArrayList<String> lcs(String [] X, String [] Y, int m, int n) 
+//  { 
+//      int[][] L = new int[m+1][n+1]; 
+//      // Following steps build L[m+1][n+1] in bottom up fashion. Note 
+//      // that L[i][j] contains length of LCS of X[0..i-1] and Y[0..j-1]  
+//      for (int i=0; i<=m; i++) 
+//      { 
+//          for (int j=0; j<=n; j++) 
+//          { 
+//              if (i == 0 || j == 0) 
+//                  L[i][j] = 0; 
+//              else if (X[i-1] == Y[j-1]) 
+//                  L[i][j] = L[i-1][j-1] + 1; 
+//              else
+//                  L[i][j] = Math.max(L[i-1][j], L[i][j-1]); 
+//          } 
+//      } 
+// 
+//      // Following code is used to print LCS 
+//      int index = L[m][n]; 
+//      int temp = index; 
+// 
+//      // Create a character array to store the lcs string 
+//      String[] lcs = new String[index+1]; 
+//      lcs[index] = ""; // Set the terminating character 
+// 
+//      // Start from the right-most-bottom-most corner and 
+//      // one by one store characters in lcs[] 
+//      int i = m, j = n; 
+//      while (i > 0 && j > 0) 
+//      { 
+//      		// If current character in X[] and Y are same, then 
+//      		// current character is part of LCS 
+//      		if (X[i-1] == Y[j-1]) 
+//      		{ 
+//      			// Put current character in result 
+//      			lcs[index-1] = X[i-1];  
+//        
+//      			// reduce values of i, j and index 
+//      			i--;  
+//      			j--;  
+//      			index--;      
+//          } 
+// 
+//      		// If not same, then find the larger of two and 
+//      		// go in the direction of larger value 
+//      		else if (L[i-1][j] > L[i][j-1]) 
+//      			i--; 
+//      		else
+//      			j--; 
+//      } 
+//      ArrayList<String> retVal = new ArrayList<String> ();
+//      for(int k=0;k<=temp;k++) {
+//            //System.out.print(lcs[k]);
+//            retVal.add(lcs[k]);
+//      }
+//      return retVal;
+//  } 
+
+
+	
+//	private void createFIS(int from,
+//			   int to,
+//			   ArrayList<String> fis,
+//			   int nestLoopCount,
+//			   int r) {
+//		if( (nestLoopCount == r) ) { // || r == FPGConfig.NO_OF_STAGES) {
+//			//Collections.sort(fis); -- Don't uncomment or delete this line. Let it be a reminder that it screws things up
+//			tmpSB.setLength(0);
+//			tmpSB.append(fis.size() + 1);
+//			tmpSB.append(separatorBetwnlevelAndRule);
+//			tmpSB.append(this.headerTableEntryDimValName);
+//			if (fis.size() > 0 ) tmpSB.append(this.separatorBetwnSuccessiveDimVal);
+//			for (int j = 0; j < fis.size(); j++) {
+//				if (!fis.get(j).equals("")) {
+//					tmpSB.append(fis.get(j));
+//					if (j < fis.size() - 1) {
+//						tmpSB.append(this.separatorBetwnSuccessiveDimVal);
+//					}
+//				}
+//			}
+//			if(FIS.containsKey(tmpSB.toString())) {
+//				MetricList ml2 = FIS.get(tmpSB.toString());
+//				ml2.updateMetricList(ml);
+//			} else {
+//				FIS.put(tmpSB.toString(), MetricList.makeReplica(ml));
+//			}
+//			return;
+//		}
+//		for (int i = from; i < to; i++) {
+//			fis.add(prefixParts[i]);
+//			createFIS(i+1,to+1,fis,nestLoopCount + 1,r);
+//			fis.remove(fis.size() - 1);
+//		}
+//	}
+	
+//	public void mineFISFromFPTree2 (ArrayList<FrequentPathToHeaderNode> _arrListFreqPath,
+//            String headerTableEntryDimValName,
+//            double supportVal,
+//            HeaderTable ht) {
+//arrListFreqPath.clear();
+//arrListFreqPath = _arrListFreqPath;
+//
+//
+//int len = arrListFreqPath.size();
+//for (int i = 0; i < len; i++) {
+////System.out.println(arrListFreqPath.get(i).getPath() +  "  " + arrListFreqPath.get(i).getPathMetric().toString());
+//if (arrListFreqPath.get(i).getPathMetric().getSupportMetricValue() >= supportVal) {
+//this.prefixParts = arrListFreqPath.get(i).getElementsOfPath();
+//this.ml = arrListFreqPath.get(i).getPathMetric();
+//this.headerTableEntryDimValName = headerTableEntryDimValName;
+////explode freq path and put in FIS cache with metric value
+//createFIS2(0,this.prefixParts.length);		
+//}
+//}
+//System.out.println(len);
+//ArrayList<FrequentPathToHeaderNode> tempArrListFreqPathContenders = new ArrayList<FrequentPathToHeaderNode>();		
+//for (int i = 0; i < len - 1; i++) {
+//for (int j = i + 1; j < len; j++) {
+//
+//BitSet b = new BitSet();
+//b.or(arrListFreqPath.get(i).getPathBitSet());
+//b.and(arrListFreqPath.get(j).getPathBitSet());
+//MetricList ml = null;
+//if ( (arrListFreqPath.get(i).getPathMetric().getSupportMetricValue() < supportVal) && 
+//(arrListFreqPath.get(j).getPathMetric().getSupportMetricValue() < supportVal) ) {
+//ml = MetricList.makeReplica(arrListFreqPath.get(i).getPathMetric());
+//ml.updateMetricList(arrListFreqPath.get(j).getPathMetric());
+//} else if ((arrListFreqPath.get(i).getPathMetric().getSupportMetricValue() < supportVal) && 
+//   (arrListFreqPath.get(j).getPathMetric().getSupportMetricValue() >= supportVal)) {
+//ml = MetricList.makeReplica(arrListFreqPath.get(i).getPathMetric());
+//} else if ((arrListFreqPath.get(i).getPathMetric().getSupportMetricValue() >= supportVal) && 
+//   (arrListFreqPath.get(j).getPathMetric().getSupportMetricValue() < supportVal)) {
+//ml = MetricList.makeReplica(arrListFreqPath.get(j).getPathMetric());
+//}  else {
+//continue;
+//}
+//
+//if (!b.isEmpty()) {
+//tempArrListFreqPathContenders.add(new FrequentPathToHeaderNode(b, ml, ht));
+//}
+//}
+//}
+//
+//arrListFreqPath = tempArrListFreqPathContenders;		
+//len = arrListFreqPath.size();
+//for (int i = 0; i < len; i++) {
+////System.out.println(arrListFreqPath.get(i).getPath() +  "  " + arrListFreqPath.get(i).getPathMetric().toString());
+//if (arrListFreqPath.get(i).getPathMetric().getSupportMetricValue() >= supportVal) {
+//this.prefixParts = arrListFreqPath.get(i).getElementsOfPath();
+//this.ml = arrListFreqPath.get(i).getPathMetric();
+//this.headerTableEntryDimValName = headerTableEntryDimValName;
+////explode freq path and put in FIS cache with metric value
+//createFIS2(0,this.prefixParts.length);		
+//}
+//}
+//
+//}	
 	
 	
 }
